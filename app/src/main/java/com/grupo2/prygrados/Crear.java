@@ -1,0 +1,151 @@
+package com.grupo2.prygrados;
+
+import android.os.Bundle;
+import android.util.Patterns;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.grupo2.prygrados.Api.ApiClient;
+import com.grupo2.prygrados.Api.ApiService;
+import com.grupo2.prygrados.Modelo.Usuario;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class Crear extends AppCompatActivity {
+
+    private EditText txtNombre, txtCorreo, txtContrasena;
+    private RadioGroup radioTipoUsuario;
+    private Button btnCrear;
+    private ApiService apiService;
+
+    // Restricciones
+    private static final int MAX_NOMBRE = 100;
+    private static final int MAX_CORREO = 100;
+    private static final int MIN_CONTRASENA = 6;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.crear);
+
+        txtNombre = findViewById(R.id.txtNombre);
+        txtCorreo = findViewById(R.id.txtCorreo);
+        txtContrasena = findViewById(R.id.txtContrasena);
+        radioTipoUsuario = findViewById(R.id.radioTipoUsuario);
+        btnCrear = findViewById(R.id.btnCrear);
+
+        apiService = ApiClient.getClient().create(ApiService.class);
+
+        btnCrear.setOnClickListener(v -> {
+            if (validarCampos()) {
+                enviarRegistro();
+            }
+        });
+    }
+
+    private boolean validarCampos() {
+        String nombre = txtNombre.getText().toString().trim();
+        String correo = txtCorreo.getText().toString().trim();
+        String contrasena = txtContrasena.getText().toString();
+
+        if (nombre.isEmpty()) {
+            txtNombre.setError("El nombre es obligatorio");
+            return false;
+        }
+        if (nombre.length() > MAX_NOMBRE) {
+            txtNombre.setError("Máximo " + MAX_NOMBRE + " caracteres");
+            return false;
+        }
+
+        if (correo.isEmpty()) {
+            txtCorreo.setError("El correo es obligatorio");
+            return false;
+        }
+        if (correo.length() > MAX_CORREO) {
+            txtCorreo.setError("Máximo " + MAX_CORREO + " caracteres");
+            return false;
+        }
+        if (!Patterns.EMAIL_ADDRESS.matcher(correo).matches()) {
+            txtCorreo.setError("Correo inválido");
+            return false;
+        }
+
+        if (contrasena.isEmpty()) {
+            txtContrasena.setError("La contraseña es obligatoria");
+            return false;
+        }
+        if (contrasena.length() < MIN_CONTRASENA) {
+            txtContrasena.setError("Mínimo " + MIN_CONTRASENA + " caracteres");
+            return false;
+        }
+
+        if (radioTipoUsuario.getCheckedRadioButtonId() == -1) {
+            Toast.makeText(this, "Selecciona un rol", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
+    }
+
+    private void enviarRegistro() {
+        String nombre = txtNombre.getText().toString().trim();
+        String correo = txtCorreo.getText().toString().trim();
+        String contrasena = txtContrasena.getText().toString();
+
+        int checkedId = radioTipoUsuario.getCheckedRadioButtonId();
+        RadioButton rb = findViewById(checkedId);
+        String rolTexto = rb.getText().toString();
+
+        // Convertir a los valores EXACTOS del backend
+        String rolBackend = rolTexto.equalsIgnoreCase("Administrador")
+                ? "admin"
+                : "empleado";
+
+        Usuario usuario = new Usuario(nombre, correo, contrasena, rolBackend);
+
+        Call<Usuario> call = apiService.crearUsuario(usuario);
+        btnCrear.setEnabled(false);
+
+        call.enqueue(new Callback<Usuario>() {
+            @Override
+            public void onResponse(Call<Usuario> call, Response<Usuario> response) {
+                btnCrear.setEnabled(true);
+
+                if (response.isSuccessful() && response.body() != null) {
+                    Toast.makeText(Crear.this,
+                            "Usuario registrado correctamente",
+                            Toast.LENGTH_SHORT).show();
+                    limpiarCampos();
+                } else {
+                    String msg = "Error al registrar";
+                    if (response.code() == 409) msg = "Correo ya registrado";
+                    Toast.makeText(Crear.this,
+                            msg + " (code: " + response.code() + ")",
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Usuario> call, Throwable t) {
+                btnCrear.setEnabled(true);
+                Toast.makeText(Crear.this,
+                        "Error de conexión: " + t.getMessage(),
+                        Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void limpiarCampos() {
+        txtNombre.setText("");
+        txtCorreo.setText("");
+        txtContrasena.setText("");
+        radioTipoUsuario.clearCheck();
+    }
+}

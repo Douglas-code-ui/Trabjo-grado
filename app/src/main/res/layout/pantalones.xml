@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <!-- TÍTULO + ICONOS SUPERIORES -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:id="@+id/txtTitulo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pantalones"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                android:textColor="#222222"
+                android:layout_alignParentStart="true" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_alignParentEnd="true"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:src="@drawable/bell"
+                    android:layout_marginRight="16dp" />
+
+                <ImageView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:src="@drawable/confi" />
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <!-- BUSCADOR -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/edittext_bacground"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:layout_marginBottom="20dp">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:src="@drawable/serch" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Buscar"
+                android:textSize="16sp"
+                android:paddingLeft="12dp"
+                android:background="@android:color/transparent"
+                android:inputType="text" />
+        </LinearLayout>
+
+        <!-- PRIMER CARRUSEL -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:background="#DDDDDD"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="24dp">
+
+            <ImageView
+                android:id="@+id/btnPrev1"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/fl1" />
+
+            <ImageView
+                android:id="@+id/imgCarrusel1"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/pan1"
+                android:layout_marginLeft="32dp"
+                android:layout_marginRight="32dp" />
+
+            <ImageView
+                android:id="@+id/btnNext1"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/fl2" />
+        </LinearLayout>
+
+        <!-- SEGUNDO CARRUSEL -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:background="#DDDDDD"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/btnPrev2"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/fl1" />
+
+            <ImageView
+                android:id="@+id/imgCarrusel2"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/pan2"
+                android:layout_marginLeft="32dp"
+                android:layout_marginRight="32dp" />
+
+            <ImageView
+                android:id="@+id/btnNext2"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/fl2" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="40dp" />
+
+    </LinearLayout>
+</ScrollView>
