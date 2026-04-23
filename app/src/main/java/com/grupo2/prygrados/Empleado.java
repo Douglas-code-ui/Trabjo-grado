@@ -30,23 +30,34 @@ public class Empleado extends AppCompatActivity {
         btnPantalones = findViewById(R.id.btnPantalones);
         btnRegistrarVenta = findViewById(R.id.btnRegistrarVenta);
 
-        // 👉 Recibir datos del login
+        // Recibir datos del login
         String nombre = getIntent().getStringExtra("nombre");
         String rol = getIntent().getStringExtra("rol");
 
-        // 👉 Mostrar datos reales del usuario
+        // Mostrar datos reales del usuario
         txtNombreEmpleado.setText(nombre);
         txtRolEmpleado.setText(rol);
 
-        // 👉 Botón BUZOS
+        // Botón BUZOS
         btnBuzos.setOnClickListener(v -> {
             Intent intent = new Intent(Empleado.this, Buzos.class);
             startActivity(intent);
         });
 
-        // 👉 Botón PANTALONES
+        // Botón PANTALONES
         btnPantalones.setOnClickListener(v -> {
             Intent intent = new Intent(Empleado.this, Pantalones.class);
+            startActivity(intent);
+        });
+
+        //  Botón REGISTRAR VENTA
+        btnRegistrarVenta.setOnClickListener(v -> {
+            Intent intent = new Intent(Empleado.this, RegistroVenta.class);
+
+            // (Opcional) enviar datos del usuario
+            intent.putExtra("nombre", txtNombreEmpleado.getText().toString());
+            intent.putExtra("rol", txtRolEmpleado.getText().toString());
+
             startActivity(intent);
         });
     }

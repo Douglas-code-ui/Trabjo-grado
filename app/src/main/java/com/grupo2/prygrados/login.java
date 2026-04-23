@@ -2,6 +2,7 @@ package com.grupo2.prygrados;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Patterns;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -38,8 +39,23 @@ public class login extends AppCompatActivity {
         String correo = txtCorreo.getText().toString().trim();
         String contrasena = txtContrasena.getText().toString().trim();
 
-        if (correo.isEmpty() || contrasena.isEmpty()) {
-            Toast.makeText(this, "Ingrese correo y contraseña", Toast.LENGTH_SHORT).show();
+        // Validar campos vacíos
+        if (correo.isEmpty()) {
+            txtCorreo.setError("Ingrese su correo electrónico");
+            txtCorreo.requestFocus();
+            return;
+        }
+
+        if (contrasena.isEmpty()) {
+            txtContrasena.setError("Ingrese su contraseña");
+            txtContrasena.requestFocus();
+            return;
+        }
+
+        // Validar formato de correo
+        if (!Patterns.EMAIL_ADDRESS.matcher(correo).matches()) {
+            txtCorreo.setError("Ingrese un correo electrónico válido");
+            txtCorreo.requestFocus();
             return;
         }
 
@@ -52,11 +68,14 @@ public class login extends AppCompatActivity {
         Call<Usuario> call = api.login(userLogin);
 
         call.enqueue(new Callback<Usuario>() {
+
             @Override
             public void onResponse(Call<Usuario> call, Response<Usuario> response) {
 
                 if (!response.isSuccessful() || response.body() == null) {
-                    Toast.makeText(login.this, "Usuario o contraseña incorrectos", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(login.this,
+                            "Usuario o contraseña incorrectos",
+                            Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -72,7 +91,6 @@ public class login extends AppCompatActivity {
 
                     intent = new Intent(login.this, Admin.class);
 
-                    // 👉 Enviar datos
                     intent.putExtra("nombre", user.getNombre());
                     intent.putExtra("rol", user.getRol());
 
@@ -80,7 +98,6 @@ public class login extends AppCompatActivity {
 
                     intent = new Intent(login.this, Empleado.class);
 
-                    // 👉 Enviar datos
                     intent.putExtra("nombre", user.getNombre());
                     intent.putExtra("rol", user.getRol());
                 }
@@ -91,7 +108,10 @@ public class login extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Usuario> call, Throwable t) {
-                Toast.makeText(login.this, "Error de conexión: " + t.getMessage(), Toast.LENGTH_LONG).show();
+
+                Toast.makeText(login.this,
+                        "Error de conexión: " + t.getMessage(),
+                        Toast.LENGTH_LONG).show();
             }
         });
     }

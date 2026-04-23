@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF">
@@ -11,7 +10,7 @@
         android:orientation="vertical"
         android:padding="24dp">
 
-        <!-- TÍTULO + ICONOS SUPERIORES -->
+        <!-- TÍTULO -->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -31,19 +30,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_alignParentEnd="true"
-                android:gravity="center_vertical">
+                android:layout_alignParentEnd="true">
 
                 <ImageView
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     android:src="@drawable/bell"
-                    android:layout_marginRight="16dp" />
+                    android:layout_marginRight="16dp"/>
 
                 <ImageView
                     android:layout_width="28dp"
                     android:layout_height="28dp"
-                    android:src="@drawable/confi" />
+                    android:src="@drawable/confi"/>
             </LinearLayout>
 
         </RelativeLayout>
@@ -65,77 +63,119 @@
                 android:src="@drawable/serch" />
 
             <EditText
+                android:id="@+id/txtBuscar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="Buscar"
-                android:textSize="16sp"
-                android:paddingLeft="12dp"
                 android:background="@android:color/transparent"
-                android:inputType="text" />
+                android:paddingLeft="12dp"/>
         </LinearLayout>
 
-        <!-- PRIMER CARRUSEL -->
+        <!-- CARRUSEL 1 -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="180dp"
             android:background="#DDDDDD"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_marginBottom="24dp">
+            android:gravity="center">
 
             <ImageView
                 android:id="@+id/btnPrev1"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:src="@drawable/fl1" />
+                android:src="@drawable/fl1"/>
 
             <ImageView
                 android:id="@+id/imgCarrusel1"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@drawable/pan1"
                 android:layout_marginLeft="32dp"
-                android:layout_marginRight="32dp" />
+                android:layout_marginRight="32dp"
+                android:src="@drawable/pan1"/>
 
             <ImageView
                 android:id="@+id/btnNext1"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:src="@drawable/fl2" />
+                android:src="@drawable/fl2"/>
         </LinearLayout>
 
-        <!-- SEGUNDO CARRUSEL -->
+        <!-- DATOS 1 -->
+        <TextView
+            android:id="@+id/txtNombre1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nombre pantalón"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_marginTop="6dp"/>
+
+        <TextView
+            android:id="@+id/txtPrecio1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="$0"/>
+
+        <TextView
+            android:id="@+id/txtStock1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Stock: 0"
+            android:layout_marginBottom="24dp"/>
+
+        <!-- CARRUSEL 2 -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="180dp"
             android:background="#DDDDDD"
-            android:orientation="horizontal"
             android:gravity="center">
 
             <ImageView
                 android:id="@+id/btnPrev2"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:src="@drawable/fl1" />
+                android:src="@drawable/fl1"/>
 
             <ImageView
                 android:id="@+id/imgCarrusel2"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@drawable/pan2"
                 android:layout_marginLeft="32dp"
-                android:layout_marginRight="32dp" />
+                android:layout_marginRight="32dp"
+                android:src="@drawable/pan2"/>
 
             <ImageView
                 android:id="@+id/btnNext2"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:src="@drawable/fl2" />
+                android:src="@drawable/fl2"/>
         </LinearLayout>
+
+        <!-- DATOS 2 -->
+        <TextView
+            android:id="@+id/txtNombre2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nombre pantalón"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_marginTop="6dp"/>
+
+        <TextView
+            android:id="@+id/txtPrecio2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="$0"/>
+
+        <TextView
+            android:id="@+id/txtStock2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Stock: 0"
+            android:layout_marginBottom="24dp"/>
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="40dp" />
+            android:layout_height="40dp"/>
 
     </LinearLayout>
 </ScrollView>

@@ -2,14 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
-    android:gravity="center"
-    android:id="@+id/main"
     android:orientation="vertical"
+    android:gravity="center"
+    android:background="#FFFFFF"
     tools:context=".MainActivity">
-
 
     <ImageView
         android:id="@+id/imgLogo"
@@ -19,31 +18,28 @@
         android:contentDescription="Logo de Kemba Store"
         android:layout_marginBottom="40dp" />
 
-    <!-- BOTÓN INICIAR SESIÓN -->
-    <Button
+    <!-- 🔥 BOTÓN INICIAR SESIÓN -->
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnLogin"
         android:layout_width="200dp"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:text="Iniciar sesión"
         android:textColor="#FFFFFF"
-        android:backgroundTint="#000000"
-        android:layout_marginBottom="20dp"
-        android:padding="10dp"
         android:textSize="16sp"
-        android:background="@drawable/rounded_button"
-         />
+        android:layout_marginBottom="20dp"
+        app:backgroundTint="#000000"
+        app:cornerRadius="12dp" />
 
-    <!-- BOTÓN CREAR CUENTA -->
-    <Button
+    <!-- 🔥 BOTÓN CREAR CUENTA -->
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnCrearCuenta"
         android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/rounded_button"
-        android:backgroundTint="#000000"
-        android:onClick="crear"
-        android:padding="10dp"
+        android:layout_height="48dp"
         android:text="Crear cuenta"
         android:textColor="#FFFFFF"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        app:backgroundTint="#000000"
+        app:cornerRadius="12dp"
+        android:onClick="crear" />
 
 </LinearLayout>

@@ -1,67 +1,198 @@
 package com.grupo2.prygrados;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.grupo2.prygrados.Api.ApiClient;
+import com.grupo2.prygrados.Api.ApiService;
+import com.grupo2.prygrados.Modelo.Producto;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Buzos extends AppCompatActivity {
 
-    // Carrusel 1
-    private int[] carrusel1 = {
-            R.drawable.buzo1,
-            R.drawable.buzo2,
-    };
-    private int index1 = 0;
+    private List<Producto> listaBuzos = new ArrayList<>();
 
-    // Carrusel 2
-    private int[] carrusel2 = {
-            R.drawable.buzo2,
-            R.drawable.buzo1
-    };
-    private int index2 = 0;
+    private int index1 = 0;
+    private int index2 = 1;
+
+    ImageView img1, img2, prev1, next1, prev2, next2;
+    TextView txtNombre1, txtPrecio1, txtStock1;
+    TextView txtNombre2, txtPrecio2, txtStock2;
+    EditText txtBuscar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.buzos);
 
-        // ------------ Referencias CARRUSEL 1 ----------------
-        ImageView img1 = findViewById(R.id.imgCarrusel1);
-        ImageView prev1 = findViewById(R.id.btnPrev1);
-        ImageView next1 = findViewById(R.id.btnNext1);
+        txtBuscar = findViewById(R.id.txtBuscar);
 
-        img1.setImageResource(carrusel1[index1]);
+        img1 = findViewById(R.id.imgCarrusel1);
+        img2 = findViewById(R.id.imgCarrusel2);
 
-        prev1.setOnClickListener(v -> {
-            index1--;
-            if (index1 < 0) index1 = carrusel1.length - 1;
-            img1.setImageResource(carrusel1[index1]);
+        prev1 = findViewById(R.id.btnPrev1);
+        next1 = findViewById(R.id.btnNext1);
+
+        prev2 = findViewById(R.id.btnPrev2);
+        next2 = findViewById(R.id.btnNext2);
+
+        txtNombre1 = findViewById(R.id.txtNombre1);
+        txtPrecio1 = findViewById(R.id.txtPrecio1);
+        txtStock1 = findViewById(R.id.txtStock1);
+
+        txtNombre2 = findViewById(R.id.txtNombre2);
+        txtPrecio2 = findViewById(R.id.txtPrecio2);
+        txtStock2 = findViewById(R.id.txtStock2);
+
+        cargarBuzos();
+
+        txtBuscar.setOnKeyListener((v, keyCode, event) -> {
+            if (event.getAction() == KeyEvent.ACTION_DOWN &&
+                    keyCode == KeyEvent.KEYCODE_ENTER) {
+
+                String texto = txtBuscar.getText().toString();
+
+                if (texto.isEmpty()) cargarBuzos();
+                else buscarProducto(texto);
+
+                return true;
+            }
+            return false;
         });
 
-        next1.setOnClickListener(v -> {
-            index1++;
-            if (index1 >= carrusel1.length) index1 = 0;
-            img1.setImageResource(carrusel1[index1]);
+        prev1.setOnClickListener(v -> moverCarrusel1(-1));
+        next1.setOnClickListener(v -> moverCarrusel1(1));
+        prev2.setOnClickListener(v -> moverCarrusel2(-1));
+        next2.setOnClickListener(v -> moverCarrusel2(1));
+    }
+
+    private void cargarBuzos() {
+
+        ApiService api = ApiClient.getClient().create(ApiService.class);
+
+        api.listarProductos().enqueue(new Callback<List<Producto>>() {
+            @Override
+            public void onResponse(Call<List<Producto>> call, Response<List<Producto>> response) {
+
+                if (response.isSuccessful() && response.body() != null) {
+
+                    listaBuzos.clear();
+
+                    for (Producto p : response.body()) {
+                        if (p.getCategoria() != null &&
+                                p.getCategoria().equalsIgnoreCase("BUZOS")) {
+
+                            listaBuzos.add(p);
+                        }
+                    }
+
+                    Log.d("BUZOS", "Total: " + listaBuzos.size());
+
+                    if (listaBuzos.isEmpty()) {
+                        txtNombre1.setText("No hay buzos");
+                        return;
+                    }
+
+                    index1 = 0;
+                    index2 = (listaBuzos.size() > 1) ? 1 : 0;
+
+                    mostrarProductos();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Producto>> call, Throwable t) {
+                txtNombre1.setText("Error conexión");
+            }
         });
+    }
 
-        // ------------ Referencias CARRUSEL 2 ----------------
-        ImageView img2 = findViewById(R.id.imgCarrusel2);
-        ImageView prev2 = findViewById(R.id.btnPrev2);
-        ImageView next2 = findViewById(R.id.btnNext2);
+    private void buscarProducto(String nombre) {
 
-        img2.setImageResource(carrusel2[index2]);
+        ApiService api = ApiClient.getClient().create(ApiService.class);
 
-        prev2.setOnClickListener(v -> {
-            index2--;
-            if (index2 < 0) index2 = carrusel2.length - 1;
-            img2.setImageResource(carrusel2[index2]);
+        api.buscarProducto(nombre).enqueue(new Callback<List<Producto>>() {
+            @Override
+            public void onResponse(Call<List<Producto>> call, Response<List<Producto>> response) {
+
+                if (response.isSuccessful() && response.body() != null) {
+
+                    listaBuzos.clear(); // CLAVE
+
+                    for (Producto p : response.body()) {
+
+                        // FILTRO CORRECTO
+                        if (p.getCategoria() != null &&
+                                p.getCategoria().equalsIgnoreCase("BUZOS")) {
+
+                            listaBuzos.add(p);
+                        }
+                    }
+
+                    if (listaBuzos.isEmpty()) {
+                        txtNombre1.setText("No hay resultados");
+                        txtPrecio1.setText("");
+                        txtStock1.setText("");
+                        return;
+                    }
+
+                    index1 = 0;
+                    index2 = (listaBuzos.size() > 1) ? 1 : 0;
+
+                    mostrarProductos();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Producto>> call, Throwable t) {
+                txtNombre1.setText("Error búsqueda");
+            }
         });
+    }
 
-        next2.setOnClickListener(v -> {
-            index2++;
-            if (index2 >= carrusel2.length) index2 = 0;
-            img2.setImageResource(carrusel2[index2]);
-        });
+    private void mostrarProductos() {
 
+        if (listaBuzos.isEmpty()) return;
+
+        Producto p1 = listaBuzos.get(index1);
+
+        txtNombre1.setText(p1.getNombre());
+        txtPrecio1.setText("$ " + p1.getPrecioVenta());
+        txtStock1.setText("Stock: " + p1.getStockActual());
+
+        img1.setImageResource(R.drawable.buzo1);
+
+        if (listaBuzos.size() > 1) {
+
+            Producto p2 = listaBuzos.get(index2);
+
+            txtNombre2.setText(p2.getNombre());
+            txtPrecio2.setText("$ " + p2.getPrecioVenta());
+            txtStock2.setText("Stock: " + p2.getStockActual());
+
+            img2.setImageResource(R.drawable.buzo2);
+        }
+    }
+
+    private void moverCarrusel1(int d) {
+        index1 = (index1 + d + listaBuzos.size()) % listaBuzos.size();
+        mostrarProductos();
+    }
+
+    private void moverCarrusel2(int d) {
+        index2 = (index2 + d + listaBuzos.size()) % listaBuzos.size();
+        mostrarProductos();
     }
 }
