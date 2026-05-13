@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
-    tools:context=".login">
+    android:background="#FFFFFF">
 
     <LinearLayout
-        android:id="@+id/linearRoot"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -17,7 +13,6 @@
         android:gravity="center_horizontal">
 
         <TextView
-            android:id="@+id/txtTitulo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Iniciar sesión"
@@ -32,8 +27,7 @@
             android:layout_height="wrap_content"
             android:text="Correo electrónico"
             android:textColor="#000000"
-            android:textSize="16sp"
-            android:layout_marginBottom="6dp" />
+            android:textSize="16sp" />
 
         <EditText
             android:id="@+id/txtCorreo"
@@ -49,33 +43,24 @@
             android:layout_height="wrap_content"
             android:text="Contraseña"
             android:textColor="#000000"
-            android:textSize="16sp"
-            android:layout_marginBottom="6dp" />
+            android:textSize="16sp" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilContrasena"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:endIconMode="password_toggle"
-            app:boxCornerRadiusTopStart="8dp"
-            app:boxCornerRadiusTopEnd="8dp"
-            app:boxCornerRadiusBottomStart="8dp"
-            app:boxCornerRadiusBottomEnd="8dp"
-            app:boxStrokeWidth="2dp"
-            app:boxStrokeColor="#000000"
             android:layout_marginBottom="18dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/txtContrasena"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:hint="Ingrese su contraseña"
+                android:background="@drawable/edittext_bacground"
                 android:inputType="textPassword"
-                android:padding="12dp"
-                android:textSize="16sp" />
+                android:padding="12dp" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <!-- 🔥 RADIO GROUP -->
         <RadioGroup
             android:id="@+id/radioTipoUsuario"
             android:layout_width="match_parent"
@@ -89,11 +74,10 @@
                 android:layout_height="wrap_content"
                 android:text="Empleado"
                 android:textColor="#000000"
-                android:buttonTint="#000000"
-                android:layout_marginBottom="10dp" />
+                android:buttonTint="#000000" />
 
             <RadioButton
-                android:id="@+id/rbAdministrador"
+                android:id="@+id/rbAdmin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Administrador"
@@ -101,31 +85,16 @@
                 android:buttonTint="#000000" />
         </RadioGroup>
 
-        <!-- 🔥 BOTÓN CORREGIDO -->
+        <!-- 🔥 BOTÓN SIN onClick -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnIniciarSesion"
             android:layout_width="220dp"
             android:layout_height="48dp"
-            android:layout_marginBottom="20dp"
             android:text="Iniciar sesión"
             android:textColor="#FFFFFF"
             android:textSize="16sp"
             app:backgroundTint="#000000"
-            app:cornerRadius="12dp"
-            android:onClick="iniciar"/>
-
-        <TextView
-            android:id="@+id/txtOlvide"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Olvidé contraseña"
-            android:textColor="#000000"
-            android:textSize="16sp"
-            android:layout_gravity="center" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="24dp" />
+            app:cornerRadius="12dp"/>
 
     </LinearLayout>
 </ScrollView>

@@ -28,6 +28,10 @@ public class Buzos extends AppCompatActivity {
     private int index2 = 1;
 
     ImageView img1, img2, prev1, next1, prev2, next2;
+
+    // 🔥 NUEVO (LUPA)
+    ImageView btnBuscar;
+
     TextView txtNombre1, txtPrecio1, txtStock1;
     TextView txtNombre2, txtPrecio2, txtStock2;
     EditText txtBuscar;
@@ -38,6 +42,9 @@ public class Buzos extends AppCompatActivity {
         setContentView(R.layout.buzos);
 
         txtBuscar = findViewById(R.id.txtBuscar);
+
+        // 🔥 NUEVO
+        btnBuscar = findViewById(R.id.btnBuscar);
 
         img1 = findViewById(R.id.imgCarrusel1);
         img2 = findViewById(R.id.imgCarrusel2);
@@ -58,24 +65,35 @@ public class Buzos extends AppCompatActivity {
 
         cargarBuzos();
 
+        // 🔎 ENTER (YA LO TENÍAS)
         txtBuscar.setOnKeyListener((v, keyCode, event) -> {
             if (event.getAction() == KeyEvent.ACTION_DOWN &&
                     keyCode == KeyEvent.KEYCODE_ENTER) {
 
-                String texto = txtBuscar.getText().toString();
-
-                if (texto.isEmpty()) cargarBuzos();
-                else buscarProducto(texto);
-
+                ejecutarBusqueda();
                 return true;
             }
             return false;
         });
 
+        // 🔥 CLICK EN LA LUPA (LO NUEVO)
+        btnBuscar.setOnClickListener(v -> ejecutarBusqueda());
+
         prev1.setOnClickListener(v -> moverCarrusel1(-1));
         next1.setOnClickListener(v -> moverCarrusel1(1));
         prev2.setOnClickListener(v -> moverCarrusel2(-1));
         next2.setOnClickListener(v -> moverCarrusel2(1));
+    }
+
+    // 🔥 MÉTODO CENTRALIZADO (EVITA REPETIR CÓDIGO)
+    private void ejecutarBusqueda() {
+        String texto = txtBuscar.getText().toString().trim();
+
+        if (texto.isEmpty()) {
+            cargarBuzos();
+        } else {
+            buscarProducto(texto);
+        }
     }
 
     private void cargarBuzos() {
@@ -129,11 +147,10 @@ public class Buzos extends AppCompatActivity {
 
                 if (response.isSuccessful() && response.body() != null) {
 
-                    listaBuzos.clear(); // CLAVE
+                    listaBuzos.clear();
 
                     for (Producto p : response.body()) {
 
-                        // FILTRO CORRECTO
                         if (p.getCategoria() != null &&
                                 p.getCategoria().equalsIgnoreCase("BUZOS")) {
 

@@ -3,12 +3,14 @@ package com.grupo2.prygrados;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.button.MaterialButton;
 import com.grupo2.prygrados.Api.ApiClient;
 import com.grupo2.prygrados.Api.ApiService;
 import com.grupo2.prygrados.Modelo.Usuario;
@@ -20,7 +22,8 @@ import retrofit2.Response;
 public class login extends AppCompatActivity {
 
     EditText txtCorreo, txtContrasena;
-    Button btnIngresar;
+    MaterialButton btnIngresar;
+    RadioGroup radioTipoUsuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +33,7 @@ public class login extends AppCompatActivity {
         txtCorreo = findViewById(R.id.txtCorreo);
         txtContrasena = findViewById(R.id.txtContrasena);
         btnIngresar = findViewById(R.id.btnIniciarSesion);
+        radioTipoUsuario = findViewById(R.id.radioTipoUsuario);
 
         btnIngresar.setOnClickListener(v -> validarLogin());
     }
@@ -39,9 +43,9 @@ public class login extends AppCompatActivity {
         String correo = txtCorreo.getText().toString().trim();
         String contrasena = txtContrasena.getText().toString().trim();
 
-        // Validar campos vacíos
+        // VALIDACIONES
         if (correo.isEmpty()) {
-            txtCorreo.setError("Ingrese su correo electrónico");
+            txtCorreo.setError("Ingrese su correo");
             txtCorreo.requestFocus();
             return;
         }
@@ -52,22 +56,40 @@ public class login extends AppCompatActivity {
             return;
         }
 
-        // Validar formato de correo
         if (!Patterns.EMAIL_ADDRESS.matcher(correo).matches()) {
-            txtCorreo.setError("Ingrese un correo electrónico válido");
+            txtCorreo.setError("Correo inválido");
             txtCorreo.requestFocus();
             return;
         }
 
+        // RADIO BUTTON
+        int selectedId = radioTipoUsuario.getCheckedRadioButtonId();
+
+        if (selectedId == -1) {
+            Toast.makeText(this, "Seleccione un rol", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        RadioButton radioSeleccionado = findViewById(selectedId);
+        String rolTemp = radioSeleccionado.getText().toString().trim().toUpperCase();
+
+        // 🔥 NORMALIZAR
+        final String rolSeleccionado;
+
+        if (rolTemp.contains("ADMIN")) {
+            rolSeleccionado = "ADMIN";
+        } else {
+            rolSeleccionado = "EMPLEADO";
+        }
+
+        // API
         ApiService api = ApiClient.getClient().create(ApiService.class);
 
         Usuario userLogin = new Usuario();
         userLogin.setCorreo(correo);
         userLogin.setContrasena(contrasena);
 
-        Call<Usuario> call = api.login(userLogin);
-
-        call.enqueue(new Callback<Usuario>() {
+        api.login(userLogin).enqueue(new Callback<Usuario>() {
 
             @Override
             public void onResponse(Call<Usuario> call, Response<Usuario> response) {
@@ -80,27 +102,41 @@ public class login extends AppCompatActivity {
                 }
 
                 Usuario user = response.body();
+                String rolBackend = user.getRol();
 
+                if (rolBackend == null) {
+                    Toast.makeText(login.this,
+                            "Usuario sin rol",
+                            Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                rolBackend = rolBackend.trim().toUpperCase();
+
+                //  VALIDACIÓN
+                if (!rolBackend.equals(rolSeleccionado)) {
+                    Toast.makeText(login.this,
+                            "Rol incorrecto\nSeleccionaste: " + rolSeleccionado +
+                                    "\nPero eres: " + rolBackend,
+                            Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                // BIENVENIDA
                 Toast.makeText(login.this,
                         "Bienvenido " + user.getNombre(),
-                        Toast.LENGTH_SHORT).show();
+                        Toast.LENGTH_LONG).show();
 
                 Intent intent;
 
-                if (user.getRol().equalsIgnoreCase("Administrador")) {
-
+                if (rolBackend.equals("ADMIN")) {
                     intent = new Intent(login.this, Admin.class);
-
-                    intent.putExtra("nombre", user.getNombre());
-                    intent.putExtra("rol", user.getRol());
-
                 } else {
-
                     intent = new Intent(login.this, Empleado.class);
-
-                    intent.putExtra("nombre", user.getNombre());
-                    intent.putExtra("rol", user.getRol());
                 }
+
+                intent.putExtra("nombre", user.getNombre());
+                intent.putExtra("rol", rolBackend);
 
                 startActivity(intent);
                 finish();
@@ -110,7 +146,7 @@ public class login extends AppCompatActivity {
             public void onFailure(Call<Usuario> call, Throwable t) {
 
                 Toast.makeText(login.this,
-                        "Error de conexión: " + t.getMessage(),
+                        "Error conexión: " + t.getMessage(),
                         Toast.LENGTH_LONG).show();
             }
         });

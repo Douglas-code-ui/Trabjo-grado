@@ -2,15 +2,32 @@ package com.grupo2.prygrados;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.grupo2.prygrados.Sync.Sync; // 🔥 IMPORTANTE
+import com.grupo2.prygrados.Sync.Sync;
 
 public class MainActivity extends AppCompatActivity {
 
     private Button btnLogin, btnCrearCuenta;
+
+    // 🔥 Handler para sincronización automática
+    private Handler handler = new Handler();
+
+    // 🔥 Cada 10 segundos
+    private Runnable runnableSync = new Runnable() {
+        @Override
+        public void run() {
+
+            // SINCRONIZAR
+            Sync.sincronizarUsuarios(MainActivity.this);
+
+            // REPETIR CADA 10 SEGUNDOS
+            handler.postDelayed(this, 10000);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,10 +38,13 @@ public class MainActivity extends AppCompatActivity {
         btnLogin = findViewById(R.id.btnLogin);
         btnCrearCuenta = findViewById(R.id.btnCrearCuenta);
 
-        // SINCRONIZAR CUANDO ABRE LA APP
-        Sync.sincronizarUsuarios(this);
+        // 🔥 INICIAR SINCRONIZACIÓN AUTOMÁTICA
+        handler.post(runnableSync);
 
-        // Ir a crear cuenta
+        // =========================
+        // CREAR CUENTA
+        // =========================
+
         btnCrearCuenta.setOnClickListener(v -> {
 
             Intent intent =
@@ -35,7 +55,10 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-        // Ir a login
+        // =========================
+        // LOGIN
+        // =========================
+
         btnLogin.setOnClickListener(v -> {
 
             Intent intent =
@@ -45,5 +68,13 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
 
         });
+    }
+
+    // 🔥 DETENER HANDLER
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        handler.removeCallbacks(runnableSync);
     }
 }

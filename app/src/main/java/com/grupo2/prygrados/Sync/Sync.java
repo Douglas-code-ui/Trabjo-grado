@@ -19,6 +19,7 @@ public class Sync {
 
     public static void sincronizarUsuarios(Context context) {
 
+        // VERIFICAR INTERNET
         if (!NetworkUtil.hayInternet(context)) {
 
             Log.d("SYNC", "Sin internet");
@@ -32,15 +33,18 @@ public class Sync {
                 ApiClient.getClient()
                         .create(ApiService.class);
 
+        // OBTENER OFFLINE
         List<Usuario> lista =
                 usuarioDAO.obtenerUsuariosOffline();
 
         Log.d("SYNC",
-                "Usuarios offline: " + lista.size());
+                "Usuarios offline: "
+                        + lista.size());
 
+        // RECORRER LISTA
         for (Usuario usuario : lista) {
 
-            // 🔥 ENVIAR SIN ID
+            // CREAR OBJETO SIN ID
             Usuario usuarioEnviar =
                     new Usuario(
                             usuario.getNombre(),
@@ -49,33 +53,56 @@ public class Sync {
                             usuario.getRol()
                     );
 
+            // ENVIAR
             Call<Usuario> call =
                     apiService.crearUsuario(usuarioEnviar);
 
             call.enqueue(new Callback<Usuario>() {
 
                 @Override
-                public void onResponse(Call<Usuario> call,
-                                       Response<Usuario> response) {
+                public void onResponse(
+                        Call<Usuario> call,
+                        Response<Usuario> response) {
 
+                    // ✅ GUARDADO CORRECTO
                     if (response.isSuccessful()) {
 
                         Log.d("SYNC",
                                 "Sincronizado: "
                                         + usuario.getCorreo());
 
-                        // 🟢 Guardar en ONLINE
                         usuarioDAO.insertarUsuarioOnline(usuario);
 
-                        // 🔥 BORRAR SOLO ESTE
                         usuarioDAO.eliminarUsuarioOffline(
                                 usuario.getId());
+
+                    }
+
+                    // ⚠ CORREO YA EXISTE
+                    else if (response.code() == 409) {
+
+                        Log.d("SYNC",
+                                "Correo ya existe: "
+                                        + usuario.getCorreo());
+
+                        // 🔥 BORRAR OFFLINE
+                        usuarioDAO.eliminarUsuarioOffline(
+                                usuario.getId());
+                    }
+
+                    // ❌ OTRO ERROR
+                    else {
+
+                        Log.e("SYNC",
+                                "Error servidor: "
+                                        + response.code());
                     }
                 }
 
                 @Override
-                public void onFailure(Call<Usuario> call,
-                                      Throwable t) {
+                public void onFailure(
+                        Call<Usuario> call,
+                        Throwable t) {
 
                     Log.e("SYNC",
                             "Error: "

@@ -28,6 +28,10 @@ public class Pantalones extends AppCompatActivity {
     private int index2 = 1;
 
     ImageView img1, img2, prev1, next1, prev2, next2;
+
+    // 🔥 NUEVO (LUPA)
+    ImageView btnBuscar;
+
     TextView txtNombre1, txtPrecio1, txtStock1;
     TextView txtNombre2, txtPrecio2, txtStock2;
     EditText txtBuscar;
@@ -38,6 +42,9 @@ public class Pantalones extends AppCompatActivity {
         setContentView(R.layout.pantalones);
 
         txtBuscar = findViewById(R.id.txtBuscar);
+
+        // 🔥 CONECTAR LUPA
+        btnBuscar = findViewById(R.id.btnBuscar);
 
         img1 = findViewById(R.id.imgCarrusel1);
         img2 = findViewById(R.id.imgCarrusel2);
@@ -58,23 +65,19 @@ public class Pantalones extends AppCompatActivity {
 
         cargarPantalones();
 
-        // BUSCADOR
+        // 🔎 ENTER
         txtBuscar.setOnKeyListener((v, keyCode, event) -> {
             if (event.getAction() == KeyEvent.ACTION_DOWN &&
                     keyCode == KeyEvent.KEYCODE_ENTER) {
 
-                String texto = txtBuscar.getText().toString();
-
-                if (texto.isEmpty()) {
-                    cargarPantalones();
-                } else {
-                    buscarProducto(texto);
-                }
-
+                ejecutarBusqueda();
                 return true;
             }
             return false;
         });
+
+        // 🔥 CLICK LUPA
+        btnBuscar.setOnClickListener(v -> ejecutarBusqueda());
 
         prev1.setOnClickListener(v -> moverCarrusel1(-1));
         next1.setOnClickListener(v -> moverCarrusel1(1));
@@ -82,7 +85,17 @@ public class Pantalones extends AppCompatActivity {
         next2.setOnClickListener(v -> moverCarrusel2(1));
     }
 
-    // LISTAR Y FILTRAR
+    // 🔥 MÉTODO CENTRAL
+    private void ejecutarBusqueda() {
+        String texto = txtBuscar.getText().toString().trim();
+
+        if (texto.isEmpty()) {
+            cargarPantalones();
+        } else {
+            buscarProducto(texto);
+        }
+    }
+
     private void cargarPantalones() {
 
         ApiService api = ApiClient.getClient().create(ApiService.class);
@@ -125,7 +138,6 @@ public class Pantalones extends AppCompatActivity {
         });
     }
 
-    // BUSCAR + FILTRAR (ESTO ERA EL ERROR)
     private void buscarProducto(String nombre) {
 
         ApiService api = ApiClient.getClient().create(ApiService.class);

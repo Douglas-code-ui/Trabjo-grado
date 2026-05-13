@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- PERMISOS -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-
 
     <application
         android:allowBackup="true"
@@ -14,23 +15,30 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.PryGrados"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
+
+        <!-- ACTIVIDADES -->
         <activity android:name=".Crear" />
         <activity android:name=".login" />
-        <activity android:name=".Empleado"></activity>
-        <activity android:name=".Buzos"></activity>
-        <activity android:name=".Pantalones"></activity>
-        <activity android:name=".RegistroVenta"/>
-        <activity android:name=".Admin"/>
+        <activity android:name=".Empleado" />
+        <activity android:name=".Buzos" />
+        <activity android:name=".Pantalones" />
+        <activity android:name=".RegistroVenta" />
+        <activity android:name=".Admin" />
+
+        <!-- MAIN -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
+
     </application>
 
 </manifest>

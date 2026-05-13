@@ -58,6 +58,7 @@
             android:layout_marginBottom="20dp">
 
             <ImageView
+                android:id="@+id/btnBuscar"
                 android:layout_width="22dp"
                 android:layout_height="22dp"
                 android:src="@drawable/serch" />

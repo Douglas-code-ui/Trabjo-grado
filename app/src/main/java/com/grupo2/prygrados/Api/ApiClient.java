@@ -17,7 +17,7 @@ public class ApiClient {
 
             retrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
-                    .addConverterFactory(ScalarsConverterFactory.create()) // 🔥 PRIMERO
+                    .addConverterFactory(ScalarsConverterFactory.create()) //
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }
