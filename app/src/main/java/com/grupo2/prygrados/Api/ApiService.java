@@ -2,6 +2,7 @@ package com.grupo2.prygrados.Api;
 
 import com.grupo2.prygrados.Modelo.Producto;
 import com.grupo2.prygrados.Modelo.Usuario;
+import com.grupo2.prygrados.Modelo.Venta;
 
 import java.util.List;
 
@@ -39,6 +40,26 @@ public interface ApiService {
 
     @GET("producto/buscar")
     Call<List<Producto>> buscarProducto(@Query("nombre") String nombre);
+    // =========================
+// 📦 OBTENER PRODUCTOS
+// =========================
+
+    @GET("producto/listar")
+    Call<List<Producto>> obtenerProductos();
+
+// =========================
+// ⚠ STOCK BAJO
+// =========================
+
+    @GET("producto/stock-bajo")
+    Call<List<Producto>> obtenerStockBajo();
+
+// =========================
+// 💰 OBTENER VENTAS
+// =========================
+
+    @GET("venta/listar")
+    Call<List<Venta>> obtenerVentas();
 
 
     // =========================
@@ -50,7 +71,7 @@ public interface ApiService {
     Call<String> registrarVenta(
             @Field("productoId") int productoId,
             @Field("cantidad") int cantidad,
-            @Field("metodoPago") String metodoPago // 🔥 NUEVO
+            @Field("metodoPago") String metodoPago
     );
 
 }

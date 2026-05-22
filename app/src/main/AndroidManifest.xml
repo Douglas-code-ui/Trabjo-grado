@@ -26,6 +26,7 @@
         <activity android:name=".Pantalones" />
         <activity android:name=".RegistroVenta" />
         <activity android:name=".Admin" />
+        <activity android:name=".Resumen"/>
 
         <!-- MAIN -->
         <activity

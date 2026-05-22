@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F5F5F5">
+
+    <!-- HEADER -->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20dp">
+
+        <TextView
+            android:id="@+id/txtTitulo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Resumen de datos"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:textColor="#000000"/>
+
+        <ImageView
+            android:id="@+id/btnConfig"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/confi"/>
+    </RelativeLayout>
+
+    <!-- MENU -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp">
+
+        <TextView
+            android:id="@+id/tabProductos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Total de Productos"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:padding="10dp"/>
+
+        <TextView
+            android:id="@+id/tabVentas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ventas de hoy"
+            android:textStyle="bold"
+            android:textColor="#666666"
+            android:textSize="14sp"
+            android:padding="10dp"/>
+
+        <TextView
+            android:id="@+id/tabStock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Stock bajo"
+            android:textStyle="bold"
+            android:textColor="#666666"
+            android:textSize="14sp"
+            android:padding="10dp"/>
+    </LinearLayout>
+
+    <!-- PRODUCTOS -->
+
+    <LinearLayout
+        android:id="@+id/layoutProductos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp">
+
+            <!-- TITULOS -->
+
+            <TableRow
+                android:background="#EEEEEE"
+                android:padding="12dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Buzos"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:textColor="#000000"
+                    android:gravity="center"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Pantalones"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:textColor="#000000"
+                    android:gravity="center"/>
+            </TableRow>
+
+            <!-- DATOS -->
+
+            <TableRow
+                android:padding="15dp">
+
+                <TextView
+                    android:id="@+id/txtBuzos"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="0"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:textColor="#000000"
+                    android:gravity="center"/>
+
+                <TextView
+                    android:id="@+id/txtPantalones"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="0"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:textColor="#000000"
+                    android:gravity="center"/>
+            </TableRow>
+
+        </TableLayout>
+
+    </LinearLayout>
+
+    <!-- VENTAS DE HOY -->
+
+    <LinearLayout
+        android:id="@+id/layoutVentas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ListView
+            android:id="@+id/listVentas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <!-- STOCK BAJO -->
+
+    <LinearLayout
+        android:id="@+id/layoutStock"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ListView
+            android:id="@+id/listStock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+</LinearLayout>
