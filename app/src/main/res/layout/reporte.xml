@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F5F5">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <!-- CABECERA -->
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/txtTitulo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Reportes"
+                android:textColor="#000000"
+                android:textSize="28sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/btnConfig"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/confi"
+                android:contentDescription="Configuración" />
+
+        </RelativeLayout>
+
+        <!-- ESPACIO -->
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="30dp"/>
+
+        <!-- TARJETA -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/edittext_bacground"
+            android:padding="18dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Descripción del reporte"
+                android:textStyle="bold"
+                android:textColor="#666666"
+                android:textSize="14sp"
+                android:layout_marginBottom="8dp"/>
+
+            <EditText
+                android:id="@+id/txtReporte"
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:gravity="top|start"
+                android:hint="Escriba aquí el reporte..."
+                android:padding="12dp"
+                android:background="@android:color/transparent"
+                android:inputType="textMultiLine"
+                android:minLines="6"/>
+
+        </LinearLayout>
+
+        <!-- ESPACIO -->
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="35dp"/>
+
+        <!-- BOTÓN ENVIAR -->
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnEnviarReporte"
+            android:layout_width="220dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:text="Enviar reporte"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            app:backgroundTint="#000000"
+            app:cornerRadius="12dp" />
+
+    </LinearLayout>
+
+</ScrollView>

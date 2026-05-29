@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="#FFFFFF">
+
+    <!-- MENSAJE -->
+    <TextView
+        android:id="@+id/txtSesionCerrada"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sesión cerrada con éxito"
+        android:textColor="#222222"
+        android:textStyle="bold"
+        android:textSize="28sp"
+        android:layout_marginBottom="30dp" />
+
+    <!-- LOGO -->
+    <ImageView
+        android:id="@+id/imgLogo"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:src="@drawable/logo_kemba"
+        android:contentDescription="Logo de Kemba Store"
+        android:layout_marginBottom="40dp" />
+
+    <!-- BOTÓN -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnVolver"
+        android:layout_width="200dp"
+        android:layout_height="48dp"
+        android:text="Volver al inicio"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        android:layout_marginBottom="20dp"
+        app:backgroundTint="#000000"
+        app:cornerRadius="12dp" />
+
+</LinearLayout>

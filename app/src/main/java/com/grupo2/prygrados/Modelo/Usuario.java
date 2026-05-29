@@ -1,20 +1,26 @@
 package com.grupo2.prygrados.Modelo;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Usuario {
 
-    // 🔥 IMPORTANTE
-    // SQLite usa este ID
-    // Retrofit NO lo enviará al backend
+    // Solo para SQLite
     private transient Integer id;
 
-    private String nombre;
-    private String correo;
-    private String contrasena;
-    private String rol;
+    @SerializedName("idUsuario")
+    private Integer idUsuario;
 
-    // =========================
-    // CONSTRUCTORES
-    // =========================
+    @SerializedName("nombre")
+    private String nombre;
+
+    @SerializedName("correo")
+    private String correo;
+
+    @SerializedName("contrasena")
+    private String contrasena;
+
+    @SerializedName("rol")
+    private String rol;
 
     public Usuario() {
     }
@@ -31,7 +37,7 @@ public class Usuario {
     }
 
     // =========================
-    // GETTERS Y SETTERS
+    // SQLITE
     // =========================
 
     public Integer getId() {
@@ -41,6 +47,22 @@ public class Usuario {
     public void setId(Integer id) {
         this.id = id;
     }
+
+    // =========================
+    // BACKEND
+    // =========================
+
+    public Integer getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(Integer idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+
+    // =========================
+    // DATOS
+    // =========================
 
     public String getNombre() {
         return nombre;

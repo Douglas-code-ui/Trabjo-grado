@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.grupo2.prygrados.Api.ApiClient;
 import com.grupo2.prygrados.Api.ApiService;
 import com.grupo2.prygrados.Modelo.Usuario;
@@ -25,6 +26,8 @@ public class login extends AppCompatActivity {
     MaterialButton btnIngresar;
     RadioGroup radioTipoUsuario;
 
+    FirebaseFirestore db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +38,20 @@ public class login extends AppCompatActivity {
         btnIngresar = findViewById(R.id.btnIniciarSesion);
         radioTipoUsuario = findViewById(R.id.radioTipoUsuario);
 
+        db = FirebaseFirestore.getInstance();
+
         btnIngresar.setOnClickListener(v -> validarLogin());
+    }
+
+    private void logEvento(String evento, String detalle) {
+
+        db.collection("logs_login").add(
+                new java.util.HashMap<String, Object>() {{
+                    put("evento", evento);
+                    put("detalle", detalle);
+                    put("fecha", System.currentTimeMillis());
+                }}
+        );
     }
 
     private void validarLogin() {
@@ -43,7 +59,6 @@ public class login extends AppCompatActivity {
         String correo = txtCorreo.getText().toString().trim();
         String contrasena = txtContrasena.getText().toString().trim();
 
-        // VALIDACIONES
         if (correo.isEmpty()) {
             txtCorreo.setError("Ingrese su correo");
             txtCorreo.requestFocus();
@@ -62,28 +77,25 @@ public class login extends AppCompatActivity {
             return;
         }
 
-        // RADIO BUTTON
         int selectedId = radioTipoUsuario.getCheckedRadioButtonId();
 
         if (selectedId == -1) {
-            Toast.makeText(this, "Seleccione un rol", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,
+                    "Seleccione un rol",
+                    Toast.LENGTH_SHORT).show();
             return;
         }
 
         RadioButton radioSeleccionado = findViewById(selectedId);
-        String rolTemp = radioSeleccionado.getText().toString().trim().toUpperCase();
 
-        // 🔥 NORMALIZAR
-        final String rolSeleccionado;
+        String rolSeleccionado =
+                radioSeleccionado.getText().toString()
+                        .equalsIgnoreCase("Administrador")
+                        ? "ADMIN"
+                        : "EMPLEADO";
 
-        if (rolTemp.contains("ADMIN")) {
-            rolSeleccionado = "ADMIN";
-        } else {
-            rolSeleccionado = "EMPLEADO";
-        }
-
-        // API
-        ApiService api = ApiClient.getClient().create(ApiService.class);
+        ApiService api =
+                ApiClient.getClient().create(ApiService.class);
 
         Usuario userLogin = new Usuario();
         userLogin.setCorreo(correo);
@@ -92,37 +104,43 @@ public class login extends AppCompatActivity {
         api.login(userLogin).enqueue(new Callback<Usuario>() {
 
             @Override
-            public void onResponse(Call<Usuario> call, Response<Usuario> response) {
+            public void onResponse(Call<Usuario> call,
+                                   Response<Usuario> response) {
 
                 if (!response.isSuccessful() || response.body() == null) {
+
                     Toast.makeText(login.this,
                             "Usuario o contraseña incorrectos",
                             Toast.LENGTH_SHORT).show();
+
+                    logEvento("LOGIN_FALLIDO", correo);
+
                     return;
                 }
 
                 Usuario user = response.body();
-                String rolBackend = user.getRol();
 
-                if (rolBackend == null) {
+                if (user.getRol() == null) {
+
                     Toast.makeText(login.this,
                             "Usuario sin rol",
-                            Toast.LENGTH_LONG).show();
+                            Toast.LENGTH_SHORT).show();
+
                     return;
                 }
 
-                rolBackend = rolBackend.trim().toUpperCase();
+                String rolBackend =
+                        user.getRol().trim().toUpperCase();
 
-                //  VALIDACIÓN
                 if (!rolBackend.equals(rolSeleccionado)) {
+
                     Toast.makeText(login.this,
-                            "Rol incorrecto\nSeleccionaste: " + rolSeleccionado +
-                                    "\nPero eres: " + rolBackend,
-                            Toast.LENGTH_LONG).show();
+                            "Rol incorrecto",
+                            Toast.LENGTH_SHORT).show();
+
                     return;
                 }
 
-                // BIENVENIDA
                 Toast.makeText(login.this,
                         "Bienvenido " + user.getNombre(),
                         Toast.LENGTH_LONG).show();
@@ -130,24 +148,53 @@ public class login extends AppCompatActivity {
                 Intent intent;
 
                 if (rolBackend.equals("ADMIN")) {
-                    intent = new Intent(login.this, Admin.class);
+
+                    intent = new Intent(
+                            login.this,
+                            Admin.class
+                    );
+
                 } else {
-                    intent = new Intent(login.this, Empleado.class);
+
+                    intent = new Intent(
+                            login.this,
+                            Empleado.class
+                    );
                 }
 
-                intent.putExtra("nombre", user.getNombre());
-                intent.putExtra("rol", rolBackend);
+                // =============================
+                // ENVIAR DATOS DEL USUARIO
+                // =============================
+
+                intent.putExtra(
+                        "idUsuario",
+                        user.getIdUsuario()
+                );
+
+                intent.putExtra(
+                        "nombre",
+                        user.getNombre()
+                );
+
+                intent.putExtra(
+                        "rol",
+                        rolBackend
+                );
 
                 startActivity(intent);
                 finish();
             }
 
             @Override
-            public void onFailure(Call<Usuario> call, Throwable t) {
+            public void onFailure(Call<Usuario> call,
+                                  Throwable t) {
 
                 Toast.makeText(login.this,
                         "Error conexión: " + t.getMessage(),
                         Toast.LENGTH_LONG).show();
+
+                logEvento("ERROR_CONEXION",
+                        t.getMessage());
             }
         });
     }

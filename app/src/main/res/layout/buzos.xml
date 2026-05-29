@@ -11,7 +11,7 @@
         android:orientation="vertical"
         android:padding="24dp">
 
-        <!-- TÍTULO + ICONOS -->
+        <!-- TÍTULO -->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -25,24 +25,46 @@
                 android:textSize="28sp"
                 android:textStyle="bold"
                 android:textColor="#222222"
-                android:layout_alignParentStart="true" />
+                android:layout_alignParentStart="true"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
                 android:orientation="horizontal"
-                android:layout_alignParentEnd="true">
+                android:gravity="center_vertical">
+
+                <!-- Campana -->
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/imgNotificacion"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/bell"
+                        android:padding="2dp"/>
+
+                    <TextView
+                        android:id="@+id/txtContador"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_gravity="end|top"
+                        android:background="@drawable/circulo_rojo"
+                        android:gravity="center"
+                        android:text="0"
+                        android:textColor="#FFFFFF"
+                        android:textSize="10sp"
+                        android:visibility="gone"/>
+                </FrameLayout>
 
                 <ImageView
                     android:layout_width="28dp"
                     android:layout_height="28dp"
-                    android:src="@drawable/bell"
-                    android:layout_marginRight="16dp"/>
-
-                <ImageView
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
+                    android:layout_marginStart="16dp"
                     android:src="@drawable/confi"/>
+
             </LinearLayout>
 
         </RelativeLayout>
@@ -51,26 +73,27 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="48dp"
+            android:layout_marginBottom="20dp"
             android:background="@drawable/edittext_bacground"
-            android:orientation="horizontal"
             android:gravity="center_vertical"
+            android:orientation="horizontal"
             android:paddingLeft="12dp"
-            android:paddingRight="12dp"
-            android:layout_marginBottom="20dp">
+            android:paddingRight="12dp">
 
             <ImageView
                 android:id="@+id/btnBuscar"
                 android:layout_width="22dp"
                 android:layout_height="22dp"
-                android:src="@drawable/serch" />
+                android:src="@drawable/serch"/>
 
             <EditText
                 android:id="@+id/txtBuscar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:hint="Buscar"
                 android:background="@android:color/transparent"
+                android:hint="Buscar"
                 android:paddingLeft="12dp"/>
+
         </LinearLayout>
 
         <!-- CARRUSEL 1 -->
@@ -99,18 +122,17 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:src="@drawable/fl2"/>
-        </LinearLayout>
 
-        <!-- DATOS BUZO 1 -->
+        </LinearLayout>
 
         <TextView
             android:id="@+id/txtNombre1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
             android:text="Nombre buzo"
-            android:textStyle="bold"
             android:textSize="18sp"
-            android:layout_marginTop="6dp"/>
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/txtPrecio1"
@@ -123,9 +145,9 @@
             android:id="@+id/txtStock1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
             android:text="Stock: 0"
-            android:textSize="16sp"
-            android:layout_marginBottom="24dp"/>
+            android:textSize="16sp"/>
 
         <!-- CARRUSEL 2 -->
         <LinearLayout
@@ -153,18 +175,17 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:src="@drawable/fl2"/>
-        </LinearLayout>
 
-        <!-- DATOS BUZO 2 -->
+        </LinearLayout>
 
         <TextView
             android:id="@+id/txtNombre2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
             android:text="Nombre buzo"
-            android:textStyle="bold"
             android:textSize="18sp"
-            android:layout_marginTop="6dp"/>
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/txtPrecio2"
@@ -177,9 +198,9 @@
             android:id="@+id/txtStock2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
             android:text="Stock: 0"
-            android:textSize="16sp"
-            android:layout_marginBottom="24dp"/>
+            android:textSize="16sp"/>
 
         <View
             android:layout_width="match_parent"

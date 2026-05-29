@@ -16,9 +16,13 @@ public class Producto {
     @SerializedName("stockActual")
     private int stockActual;
 
-    // 🔥 FALTABA ESTO
     @SerializedName("categoria")
     private String categoria;
+
+    @SerializedName("talla")
+    private String talla;
+
+    // GETTERS
 
     public int getIdProducto() {
         return idProducto;
@@ -38,6 +42,32 @@ public class Producto {
 
     public String getCategoria() {
         return categoria;
+    }
+
+    public String getTalla() {
+        return talla;
+    }
+
+    // SETTERS
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
+    }
+
+    public void setTalla(String talla) {
+        this.talla = talla;
+    }
+
+    public void setPrecioVenta(double precioVenta) {
+        this.precioVenta = precioVenta;
+    }
+
+    public void setStockActual(int stockActual) {
+        this.stockActual = stockActual;
     }
 
     @Override

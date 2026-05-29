@@ -27,6 +27,15 @@
         <activity android:name=".RegistroVenta" />
         <activity android:name=".Admin" />
         <activity android:name=".Resumen"/>
+        <activity android:name=".Factur"/>
+        <activity android:name=".Inventari"/>
+        <activity android:name=".RegistrarPrenda"/>
+        <activity android:name=".Venta"/>
+        <activity android:name=".Reportes"/>
+        <activity android:name=".Notificaciones"/>
+        <activity android:name=".CerrarSesion"/>
+
+
 
         <!-- MAIN -->
         <activity

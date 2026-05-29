@@ -3,12 +3,15 @@ package com.grupo2.prygrados;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.content.Intent;
+import android.view.View;
 
+import com.grupo2.prygrados.Modelo.Reporte;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.grupo2.prygrados.Api.ApiClient;
 import com.grupo2.prygrados.Api.ApiService;
 import com.grupo2.prygrados.Modelo.Producto;
@@ -28,13 +31,15 @@ public class Pantalones extends AppCompatActivity {
     private int index2 = 1;
 
     ImageView img1, img2, prev1, next1, prev2, next2;
-
-    // 🔥 NUEVO (LUPA)
     ImageView btnBuscar;
 
     TextView txtNombre1, txtPrecio1, txtStock1;
     TextView txtNombre2, txtPrecio2, txtStock2;
     EditText txtBuscar;
+    ImageView imgNotificacion;
+    TextView txtContador;
+
+    FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,9 +47,22 @@ public class Pantalones extends AppCompatActivity {
         setContentView(R.layout.pantalones);
 
         txtBuscar = findViewById(R.id.txtBuscar);
-
-        // 🔥 CONECTAR LUPA
         btnBuscar = findViewById(R.id.btnBuscar);
+        imgNotificacion = findViewById(R.id.imgNotificacion);
+        txtContador = findViewById(R.id.txtContador);
+
+        cargarNotificaciones();
+
+        imgNotificacion.setOnClickListener(v -> {
+
+            Intent intent = new Intent(
+                    Pantalones.this,
+                    Notificaciones.class
+            );
+
+            startActivity(intent);
+
+        });
 
         img1 = findViewById(R.id.imgCarrusel1);
         img2 = findViewById(R.id.imgCarrusel2);
@@ -63,9 +81,13 @@ public class Pantalones extends AppCompatActivity {
         txtPrecio2 = findViewById(R.id.txtPrecio2);
         txtStock2 = findViewById(R.id.txtStock2);
 
+        db = FirebaseFirestore.getInstance();
+
+        // 🔥 LOG: entrada pantalla
+        logEvento("SUCCESS", "APP_PANTALONES", "Entró a pantalla pantalones");
+
         cargarPantalones();
 
-        // 🔎 ENTER
         txtBuscar.setOnKeyListener((v, keyCode, event) -> {
             if (event.getAction() == KeyEvent.ACTION_DOWN &&
                     keyCode == KeyEvent.KEYCODE_ENTER) {
@@ -76,7 +98,6 @@ public class Pantalones extends AppCompatActivity {
             return false;
         });
 
-        // 🔥 CLICK LUPA
         btnBuscar.setOnClickListener(v -> ejecutarBusqueda());
 
         prev1.setOnClickListener(v -> moverCarrusel1(-1));
@@ -85,17 +106,29 @@ public class Pantalones extends AppCompatActivity {
         next2.setOnClickListener(v -> moverCarrusel2(1));
     }
 
-    // 🔥 MÉTODO CENTRAL
+    // =========================
+    // BUSQUEDA
+    // =========================
     private void ejecutarBusqueda() {
+
         String texto = txtBuscar.getText().toString().trim();
 
         if (texto.isEmpty()) {
+
+            logEvento("SUCCESS", "CLICK_BUSCAR_VACIO", "Recargando pantalones");
+
             cargarPantalones();
         } else {
+
+            logEvento("SUCCESS", "BUSQUEDA", "Buscando: " + texto);
+
             buscarProducto(texto);
         }
     }
 
+    // =========================
+    // CARGAR
+    // =========================
     private void cargarPantalones() {
 
         ApiService api = ApiClient.getClient().create(ApiService.class);
@@ -116,7 +149,7 @@ public class Pantalones extends AppCompatActivity {
                         }
                     }
 
-                    Log.d("PANTALONES", "Total: " + listaPantalones.size());
+                    logEvento("SUCCESS", "CARGA_PANTALONES", "Total: " + listaPantalones.size());
 
                     if (listaPantalones.isEmpty()) {
                         txtNombre1.setText("No hay pantalones");
@@ -127,17 +160,25 @@ public class Pantalones extends AppCompatActivity {
                     index2 = (listaPantalones.size() > 1) ? 1 : 0;
 
                     mostrarProductos();
+
+                } else {
+                    logEvento("ERROR", "API_PANTALONES", "Respuesta no exitosa");
                 }
             }
 
             @Override
             public void onFailure(Call<List<Producto>> call, Throwable t) {
+
+                logEvento("ERROR", "ERROR_CONEXION", t.getMessage());
+
                 txtNombre1.setText("Error conexión");
-                t.printStackTrace();
             }
         });
     }
 
+    // =========================
+    // BUSCAR
+    // =========================
     private void buscarProducto(String nombre) {
 
         ApiService api = ApiClient.getClient().create(ApiService.class);
@@ -159,11 +200,14 @@ public class Pantalones extends AppCompatActivity {
                     }
 
                     if (listaPantalones.isEmpty()) {
+
+                        logEvento("ERROR", "SIN_RESULTADOS", nombre);
+
                         txtNombre1.setText("No encontrado");
-                        txtPrecio1.setText("");
-                        txtStock1.setText("");
                         return;
                     }
+
+                    logEvento("SUCCESS", "RESULTADO_BUSQUEDA", nombre);
 
                     index1 = 0;
                     index2 = (listaPantalones.size() > 1) ? 1 : 0;
@@ -174,12 +218,17 @@ public class Pantalones extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Producto>> call, Throwable t) {
+
+                logEvento("ERROR", "ERROR_BUSQUEDA", t.getMessage());
+
                 txtNombre1.setText("Error búsqueda");
-                t.printStackTrace();
             }
         });
     }
 
+    // =========================
+    // MOSTRAR
+    // =========================
     private void mostrarProductos() {
 
         if (listaPantalones.isEmpty()) return;
@@ -203,6 +252,41 @@ public class Pantalones extends AppCompatActivity {
             img2.setImageResource(R.drawable.pan2);
         }
     }
+    private void cargarNotificaciones() {
+
+        ApiService api =
+                ApiClient.getClient().create(ApiService.class);
+
+        api.listarReportes().enqueue(new Callback<List<Reporte>>() {
+
+            @Override
+            public void onResponse(Call<List<Reporte>> call,
+                                   Response<List<Reporte>> response) {
+
+                if (response.isSuccessful() && response.body() != null) {
+
+                    int cantidad = response.body().size();
+
+                    if (cantidad == 0) {
+
+                        txtContador.setVisibility(View.GONE);
+
+                    } else {
+
+                        txtContador.setVisibility(View.VISIBLE);
+                        txtContador.setText(String.valueOf(cantidad));
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Reporte>> call,
+                                  Throwable t) {
+
+            }
+        });
+
+    }
 
     private void moverCarrusel1(int d) {
         index1 = (index1 + d + listaPantalones.size()) % listaPantalones.size();
@@ -212,5 +296,20 @@ public class Pantalones extends AppCompatActivity {
     private void moverCarrusel2(int d) {
         index2 = (index2 + d + listaPantalones.size()) % listaPantalones.size();
         mostrarProductos();
+    }
+
+    // =========================
+    // FIREBASE LOG
+    // =========================
+    private void logEvento(String tipo, String evento, String detalle) {
+
+        java.util.HashMap<String, Object> log = new java.util.HashMap<>();
+
+        log.put("tipo", tipo);
+        log.put("evento", evento);
+        log.put("detalle", detalle);
+        log.put("fecha", System.currentTimeMillis());
+
+        db.collection("logs_pantalones").add(log);
     }
 }

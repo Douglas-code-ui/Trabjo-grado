@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "498857168164",
+    "project_id": "kembastore-ef23d",
+    "storage_bucket": "kembastore-ef23d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:498857168164:android:49d8ad529258465369f7b1",
+        "android_client_info": {
+          "package_name": "com.grupo2.prygrados"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAouu8FyF_NpHLCLcB9r64O3-mshYRgy1w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
