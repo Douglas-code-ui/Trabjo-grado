@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="kemba_black">#0B0B0D</color>
+    <color name="kemba_surface">#14141A</color>
+    <color name="kemba_stroke">#3A3A44</color>
+    <color name="kemba_gold">#D4A84F</color>
+    <color name="kemba_gold_dark">#B8860B</color>
+    <color name="kemba_white">#FFFFFF</color>
+    <color name="kemba_hint">#B5B5BE</color>
 </resources>

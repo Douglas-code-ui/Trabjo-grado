@@ -1,45 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:background="#FFFFFF"
+    android:background="@color/kemba_black"
     tools:context=".MainActivity">
 
     <ImageView
-        android:id="@+id/imgLogo"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
-        android:src="@drawable/logo_kemba"
-        android:contentDescription="Logo de Kemba Store"
-        android:layout_marginBottom="40dp" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/kemba"
+        android:contentDescription="@null" />
 
-    <!-- 🔥 BOTÓN INICIAR SESIÓN -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnLogin"
-        android:layout_width="200dp"
-        android:layout_height="48dp"
-        android:text="Iniciar sesión"
-        android:textColor="#FFFFFF"
-        android:textSize="16sp"
-        android:layout_marginBottom="20dp"
-        app:backgroundTint="#000000"
-        app:cornerRadius="12dp" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#66000000" />
 
-    <!-- 🔥 BOTÓN CREAR CUENTA -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnCrearCuenta"
-        android:layout_width="200dp"
-        android:layout_height="48dp"
-        android:text="Crear cuenta"
-        android:textColor="#FFFFFF"
-        android:textSize="16sp"
-        app:backgroundTint="#000000"
-        app:cornerRadius="12dp"
-        android:onClick="crear" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingStart="32dp"
+        android:paddingTop="80dp"
+        android:paddingEnd="32dp"
+        android:paddingBottom="40dp">
 
-</LinearLayout>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnLogin"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:text="Iniciar sesión"
+            android:textColor="@color/kemba_black"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:backgroundTint="@color/kemba_gold"
+            app:cornerRadius="26dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCrearCuenta"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginTop="14dp"
+            android:text="Crear cuenta"
+            android:textColor="@color/kemba_gold"
+            android:textSize="16sp"
+            app:backgroundTint="@android:color/transparent"
+            app:cornerRadius="26dp"
+            app:strokeColor="@color/kemba_gold"
+            app:strokeWidth="1.5dp" />
+    </LinearLayout>
+</FrameLayout>

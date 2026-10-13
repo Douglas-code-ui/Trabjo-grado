@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
+    android:background="@color/kemba_black"
+    android:fillViewport="true"
+    android:scrollbars="none"
     tools:context=".Empleado">
 
     <LinearLayout
@@ -18,52 +19,62 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:background="@drawable/edittext_bacground"
-            android:orientation="horizontal"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/bg_input"
             android:gravity="center_vertical"
-            android:paddingLeft="12dp"
-            android:paddingRight="12dp"
-            android:layout_marginBottom="24dp">
+            android:orientation="horizontal"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp">
 
             <ImageView
                 android:layout_width="22dp"
                 android:layout_height="22dp"
-                android:src="@drawable/serch" />
+                android:contentDescription="@null"
+                android:src="@drawable/ic_search"
+                app:tint="@color/kemba_hint" />
 
             <EditText
                 android:id="@+id/txtBuscar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:background="@android:color/transparent"
                 android:hint="Buscar"
-                android:textColor="#000000"
-                android:paddingLeft="10dp"
-                android:inputType="text" />
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:paddingStart="10dp"
+                android:textColor="@color/kemba_white"
+                android:textColorHint="@color/kemba_hint"
+                android:textSize="14sp" />
         </LinearLayout>
 
-        <!-- ICONO CONFIGURACIÓN -->
+        <!-- CONFIGURACIÓN -->
         <ImageView
             android:id="@+id/btnConfig"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_gravity="end"
-            android:src="@drawable/confi"
-            android:layout_marginBottom="28dp" />
+            android:layout_marginBottom="20dp"
+            android:contentDescription="Configuración"
+            android:src="@drawable/ic_settings"
+            app:tint="@color/kemba_gold" />
 
         <!-- TARJETA USUARIO -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"
+            android:background="@drawable/bg_card"
+            android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:padding="12dp"
-            android:background="@drawable/edittext_bacground"
-            android:layout_marginBottom="40dp">
+            android:padding="16dp">
 
             <ImageView
-                android:layout_width="72dp"
-                android:layout_height="72dp"
-                android:src="@drawable/user"
-                android:layout_marginRight="16dp" />
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginEnd="16dp"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_user"
+                app:tint="@color/kemba_gold" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -75,85 +86,103 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=""
+                    android:textColor="@color/kemba_white"
                     android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="#000000" />
+                    android:textStyle="bold" />
 
                 <LinearLayout
-                    android:orientation="horizontal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical">
+                    android:layout_marginTop="2dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/txtRolEmpleado"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text=""
-                        android:textSize="16sp"
-                        android:textColor="#000000" />
+                        android:textColor="@color/kemba_gold"
+                        android:textSize="15sp" />
 
                     <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/user"
-                        android:layout_marginLeft="6dp" />
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_marginStart="6dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_user"
+                        app:tint="@color/kemba_gold" />
                 </LinearLayout>
-
             </LinearLayout>
         </LinearLayout>
 
-        <!-- BOTON BUZOS -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnBuzos"
-            android:layout_width="220dp"
-            android:layout_height="48dp"
-            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="14dp"
             android:text="Buzos"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/kemba_white"
             android:textSize="16sp"
-            app:backgroundTint="#000000"
-            app:cornerRadius="12dp"
-            android:layout_marginBottom="28dp" />
+            app:backgroundTint="@color/kemba_surface"
+            app:cornerRadius="14dp"
+            app:icon="@drawable/ic_buzo"
+            app:iconGravity="start"
+            app:iconTint="@color/kemba_gold"
+            app:strokeColor="@color/kemba_stroke"
+            app:strokeWidth="1dp" />
 
-        <!-- BOTON PANTALONES -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnPantalones"
-            android:layout_width="220dp"
-            android:layout_height="48dp"
-            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="14dp"
             android:text="Pantalones"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/kemba_white"
             android:textSize="16sp"
-            app:backgroundTint="#000000"
-            app:cornerRadius="12dp"
-            android:layout_marginBottom="28dp" />
+            app:backgroundTint="@color/kemba_surface"
+            app:cornerRadius="14dp"
+            app:icon="@drawable/ic_pantalon"
+            app:iconGravity="start"
+            app:iconTint="@color/kemba_gold"
+            app:strokeColor="@color/kemba_stroke"
+            app:strokeWidth="1dp" />
 
-        <!-- BOTON REGISTRAR VENTA -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnRegistrarVenta"
-            android:layout_width="220dp"
-            android:layout_height="48dp"
-            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="14dp"
             android:text="Registrar venta"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/kemba_white"
             android:textSize="16sp"
-            app:backgroundTint="#000000"
-            app:cornerRadius="12dp"
-            android:layout_marginBottom="32dp" />
+            app:backgroundTint="@color/kemba_surface"
+            app:cornerRadius="14dp"
+            app:icon="@drawable/ic_ventas"
+            app:iconGravity="start"
+            app:iconTint="@color/kemba_gold"
+            app:strokeColor="@color/kemba_stroke"
+            app:strokeWidth="1dp" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btncierre"
-            android:layout_width="220dp"
-            android:layout_height="48dp"
-            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="0dp"
             android:text="Cerrar sesion"
-            android:textColor="#FFFFFF"
+            android:textColor="#E24B4A"
             android:textSize="16sp"
-            app:backgroundTint="#000000"
-            app:cornerRadius="12dp"
-            android:layout_marginBottom="32dp" />
+            app:backgroundTint="@color/kemba_surface"
+            app:cornerRadius="14dp"
+            app:icon="@drawable/ic_logout"
+            app:iconGravity="start"
+            app:iconTint="#E24B4A"
+            app:strokeColor="#E24B4A"
+            app:strokeWidth="1dp" />
 
     </LinearLayout>
-
 </ScrollView>

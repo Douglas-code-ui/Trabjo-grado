@@ -7,7 +7,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 public class ApiClient {
 
     private static final String BASE_URL =
-            "http://192.168.100.13:8080/";
+            "http://192.168.100.14:8080/";
 
     private static Retrofit retrofit = null;
 
