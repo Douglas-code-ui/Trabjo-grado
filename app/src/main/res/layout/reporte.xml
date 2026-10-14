@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F5F5">
+    android:background="@color/kemba_black"
+    android:fillViewport="true"
+    android:scrollbars="none">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="20dp">
+        android:padding="24dp">
 
         <!-- CABECERA -->
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -22,8 +22,9 @@
                 android:id="@+id/txtTitulo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
                 android:text="Reportes"
-                android:textColor="#000000"
+                android:textColor="@color/kemba_gold"
                 android:textSize="28sp"
                 android:textStyle="bold" />
 
@@ -32,68 +33,115 @@
                 android:layout_width="28dp"
                 android:layout_height="28dp"
                 android:layout_alignParentEnd="true"
-                android:src="@drawable/confi"
-                android:contentDescription="Configuración" />
-
+                android:layout_centerVertical="true"
+                android:contentDescription="Configuración"
+                android:src="@drawable/ic_settings"
+                app:tint="@color/kemba_gold" />
         </RelativeLayout>
 
         <!-- ESPACIO -->
-
         <Space
             android:layout_width="match_parent"
-            android:layout_height="30dp"/>
+            android:layout_height="24dp" />
 
-        <!-- TARJETA -->
-
+        <!-- STOCK BAJO (consulta de prendas con pocas unidades) -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/bg_card"
             android:orientation="vertical"
-            android:background="@drawable/edittext_bacground"
             android:padding="18dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Descripción del reporte"
-                android:textStyle="bold"
-                android:textColor="#666666"
+                android:text="Prendas con stock bajo"
+                android:textColor="@color/kemba_hint"
                 android:textSize="14sp"
-                android:layout_marginBottom="8dp"/>
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txtEstadoStock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Cargando..."
+                android:textColor="@color/kemba_white"
+                android:textSize="14sp" />
+
+            <!-- Las filas se agregan desde el código -->
+            <LinearLayout
+                android:id="@+id/layoutStockBajo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnReportarStock"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="14dp"
+                android:text="Reportar todas"
+                android:textAllCaps="false"
+                android:textColor="@color/kemba_gold"
+                android:textSize="15sp"
+                android:visibility="gone"
+                app:backgroundTint="@android:color/transparent"
+                app:cornerRadius="24dp"
+                app:strokeColor="@color/kemba_gold"
+                app:strokeWidth="1.5dp" />
+        </LinearLayout>
+
+        <!-- TARJETA -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_card"
+            android:orientation="vertical"
+            android:padding="18dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="Descripción del reporte"
+                android:textColor="@color/kemba_hint"
+                android:textSize="14sp"
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/txtReporte"
                 android:layout_width="match_parent"
                 android:layout_height="160dp"
+                android:background="@android:color/transparent"
                 android:gravity="top|start"
                 android:hint="Escriba aquí el reporte..."
+                android:importantForAutofill="no"
+                android:inputType="textMultiLine|textCapSentences"
+                android:minLines="6"
                 android:padding="12dp"
-                android:background="@android:color/transparent"
-                android:inputType="textMultiLine"
-                android:minLines="6"/>
-
+                android:textColor="@color/kemba_white"
+                android:textColorHint="@color/kemba_hint"
+                android:textSize="14sp" />
         </LinearLayout>
 
         <!-- ESPACIO -->
-
         <Space
             android:layout_width="match_parent"
-            android:layout_height="35dp"/>
+            android:layout_height="35dp" />
 
         <!-- BOTÓN ENVIAR -->
-
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnEnviarReporte"
-            android:layout_width="220dp"
-            android:layout_height="48dp"
-            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
             android:text="Enviar reporte"
             android:textAllCaps="false"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/kemba_black"
             android:textSize="16sp"
-            app:backgroundTint="#000000"
-            app:cornerRadius="12dp" />
-
+            android:textStyle="bold"
+            app:backgroundTint="@color/kemba_gold"
+            app:cornerRadius="26dp" />
     </LinearLayout>
-
 </ScrollView>

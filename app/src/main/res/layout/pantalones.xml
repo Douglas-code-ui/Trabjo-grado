@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF">
+    android:background="@color/kemba_black"
+    android:fillViewport="true"
+    android:scrollbars="none">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,18 +23,20 @@
                 android:id="@+id/txtTitulo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
                 android:text="Pantalones"
+                android:textColor="@color/kemba_gold"
                 android:textSize="28sp"
-                android:textStyle="bold"
-                android:textColor="#222222"
-                android:layout_alignParentStart="true"/>
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:layout_centerVertical="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <!-- Campana -->
                 <FrameLayout
@@ -43,30 +47,32 @@
                         android:id="@+id/imgNotificacion"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:src="@drawable/bell"
-                        android:padding="2dp"/>
+                        android:contentDescription="Notificaciones"
+                        android:padding="2dp"
+                        android:src="@drawable/ic_bell"
+                        app:tint="@color/kemba_white" />
 
                     <TextView
                         android:id="@+id/txtContador"
                         android:layout_width="18dp"
                         android:layout_height="18dp"
                         android:layout_gravity="end|top"
-                        android:background="@drawable/circulo_rojo"
+                        android:background="@drawable/bg_badge_red"
                         android:gravity="center"
                         android:text="0"
                         android:textColor="#FFFFFF"
                         android:textSize="10sp"
-                        android:visibility="gone"/>
+                        android:visibility="gone" />
                 </FrameLayout>
 
                 <ImageView
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     android:layout_marginStart="16dp"
-                    android:src="@drawable/confi"/>
-
+                    android:contentDescription="Configuración"
+                    android:src="@drawable/ic_settings"
+                    app:tint="@color/kemba_gold" />
             </LinearLayout>
-
         </RelativeLayout>
 
         <!-- BUSCADOR -->
@@ -74,17 +80,19 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_marginBottom="20dp"
-            android:background="@drawable/edittext_bacground"
+            android:background="@drawable/bg_input"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingLeft="12dp"
-            android:paddingRight="12dp">
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp">
 
             <ImageView
                 android:id="@+id/btnBuscar"
                 android:layout_width="22dp"
                 android:layout_height="22dp"
-                android:src="@drawable/serch"/>
+                android:contentDescription="Buscar"
+                android:src="@drawable/ic_search"
+                app:tint="@color/kemba_hint" />
 
             <EditText
                 android:id="@+id/txtBuscar"
@@ -92,120 +100,144 @@
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent"
                 android:hint="Buscar"
-                android:paddingLeft="12dp"/>
-
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:paddingStart="12dp"
+                android:textColor="@color/kemba_white"
+                android:textColorHint="@color/kemba_hint"
+                android:textSize="14sp" />
         </LinearLayout>
 
         <!-- CARRUSEL 1 -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="180dp"
-            android:background="#DDDDDD"
+            android:background="@drawable/bg_card"
             android:gravity="center">
 
             <ImageView
                 android:id="@+id/btnPrev1"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:src="@drawable/fl1"/>
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:contentDescription="Anterior"
+                android:src="@drawable/ic_chevron_left"
+                app:tint="@color/kemba_gold" />
 
             <ImageView
                 android:id="@+id/imgCarrusel1"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_marginLeft="32dp"
-                android:layout_marginRight="32dp"
-                android:src="@drawable/pan1"/>
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_marginStart="28dp"
+                android:layout_marginEnd="28dp"
+                android:contentDescription="@null"
+                android:scaleType="centerInside"
+                android:src="@drawable/pan1" />
 
             <ImageView
                 android:id="@+id/btnNext1"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:src="@drawable/fl2"/>
-
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:contentDescription="Siguiente"
+                android:src="@drawable/ic_chevron_right"
+                app:tint="@color/kemba_gold" />
         </LinearLayout>
 
         <TextView
             android:id="@+id/txtNombre1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="10dp"
             android:text="Nombre pantalon"
+            android:textColor="@color/kemba_white"
             android:textSize="18sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/txtPrecio1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
             android:text="$0"
-            android:textSize="16sp"/>
+            android:textColor="@color/kemba_gold"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/txtStock1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
             android:layout_marginBottom="24dp"
             android:text="Stock: 0"
-            android:textSize="16sp"/>
+            android:textColor="@color/kemba_hint"
+            android:textSize="14sp" />
 
         <!-- CARRUSEL 2 -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="180dp"
-            android:background="#DDDDDD"
+            android:background="@drawable/bg_card"
             android:gravity="center">
 
             <ImageView
                 android:id="@+id/btnPrev2"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:src="@drawable/fl1"/>
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:contentDescription="Anterior"
+                android:src="@drawable/ic_chevron_left"
+                app:tint="@color/kemba_gold" />
 
             <ImageView
                 android:id="@+id/imgCarrusel2"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_marginLeft="32dp"
-                android:layout_marginRight="32dp"
-                android:src="@drawable/pan2"/>
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_marginStart="28dp"
+                android:layout_marginEnd="28dp"
+                android:contentDescription="@null"
+                android:scaleType="centerInside"
+                android:src="@drawable/pan2" />
 
             <ImageView
                 android:id="@+id/btnNext2"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:src="@drawable/fl2"/>
-
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:contentDescription="Siguiente"
+                android:src="@drawable/ic_chevron_right"
+                app:tint="@color/kemba_gold" />
         </LinearLayout>
 
         <TextView
             android:id="@+id/txtNombre2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="10dp"
             android:text="Nombre pantalon"
+            android:textColor="@color/kemba_white"
             android:textSize="18sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/txtPrecio2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
             android:text="$0"
-            android:textSize="16sp"/>
+            android:textColor="@color/kemba_gold"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/txtStock2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
             android:layout_marginBottom="24dp"
             android:text="Stock: 0"
-            android:textSize="16sp"/>
+            android:textColor="@color/kemba_hint"
+            android:textSize="14sp" />
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="40dp"/>
-
+            android:layout_height="40dp" />
     </LinearLayout>
-
 </ScrollView>

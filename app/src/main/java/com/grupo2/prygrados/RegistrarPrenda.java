@@ -9,9 +9,12 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.grupo2.prygrados.Api.ApiClient;
 import com.grupo2.prygrados.Api.ApiService;
 import com.grupo2.prygrados.Modelo.Producto;
+
+import java.util.HashMap;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -28,6 +31,8 @@ public class RegistrarPrenda extends AppCompatActivity {
 
     private MaterialButton btnGuardar;
 
+    private FirebaseFirestore db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,20 +47,23 @@ public class RegistrarPrenda extends AppCompatActivity {
 
         btnGuardar = findViewById(R.id.btnGuardar);
 
+        db = FirebaseFirestore.getInstance();
+
+        logEvento("SUCCESS", "APP_REGISTRAR_PRENDA", "Entró a registrar prenda");
+
         String[] categorias = {
                 "BUZOS",
                 "PANTALONES"
         };
 
+        // 🎨 Layouts oscuros propios: texto blanco en el Spinner
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 this,
-                android.R.layout.simple_spinner_item,
+                R.layout.item_spinner,
                 categorias
         );
 
-        adapter.setDropDownViewResource(
-                android.R.layout.simple_spinner_dropdown_item
-        );
+        adapter.setDropDownViewResource(R.layout.item_spinner_dropdown);
 
         spCategoria.setAdapter(adapter);
 
@@ -67,26 +75,61 @@ public class RegistrarPrenda extends AppCompatActivity {
         String nombre = txtNombre.getText().toString().trim();
         String categoria = spCategoria.getSelectedItem().toString();
         String talla = txtTalla.getText().toString().trim();
-        String precio = txtPrecio.getText().toString().trim();
-        String stock = txtStock.getText().toString().trim();
+        String precioStr = txtPrecio.getText().toString().trim();
+        String stockStr = txtStock.getText().toString().trim();
 
-        if(nombre.isEmpty()){
+        if (nombre.isEmpty()) {
+            logEvento("ERROR", "VALIDACION_NOMBRE", "Nombre vacío");
             txtNombre.setError("Ingrese el nombre");
             return;
         }
 
-        if(talla.isEmpty()){
+        if (talla.isEmpty()) {
+            logEvento("ERROR", "VALIDACION_TALLA", "Talla vacía");
             txtTalla.setError("Ingrese la talla");
             return;
         }
 
-        if(precio.isEmpty()){
+        if (precioStr.isEmpty()) {
+            logEvento("ERROR", "VALIDACION_PRECIO", "Precio vacío");
             txtPrecio.setError("Ingrese el precio");
             return;
         }
 
-        if(stock.isEmpty()){
+        if (stockStr.isEmpty()) {
+            logEvento("ERROR", "VALIDACION_STOCK", "Stock vacío");
             txtStock.setError("Ingrese el stock");
+            return;
+        }
+
+        double precio;
+        int stock;
+
+        try {
+            precio = Double.parseDouble(precioStr);
+        } catch (NumberFormatException e) {
+            logEvento("ERROR", "VALIDACION_PRECIO", "Precio inválido");
+            txtPrecio.setError("Precio inválido");
+            return;
+        }
+
+        try {
+            stock = Integer.parseInt(stockStr);
+        } catch (NumberFormatException e) {
+            logEvento("ERROR", "VALIDACION_STOCK", "Stock inválido");
+            txtStock.setError("Stock inválido");
+            return;
+        }
+
+        if (precio <= 0) {
+            logEvento("ERROR", "VALIDACION_PRECIO", "Precio menor o igual a 0");
+            txtPrecio.setError("El precio debe ser mayor a 0");
+            return;
+        }
+
+        if (stock < 0) {
+            logEvento("ERROR", "VALIDACION_STOCK", "Stock negativo");
+            txtStock.setError("El stock no puede ser negativo");
             return;
         }
 
@@ -95,12 +138,13 @@ public class RegistrarPrenda extends AppCompatActivity {
         producto.setNombre(nombre);
         producto.setCategoria(categoria);
         producto.setTalla(talla);
-        producto.setPrecioVenta(
-                Double.parseDouble(precio)
-        );
-        producto.setStockActual(
-                Integer.parseInt(stock)
-        );
+        producto.setPrecioVenta(precio);
+        producto.setStockActual(stock);
+
+        logEvento("SUCCESS", "CLICK_GUARDAR_PRENDA", "Intento de guardar: " + nombre + " / " + categoria);
+
+        // Evita guardar dos veces si tocan el botón varias veces
+        btnGuardar.setEnabled(false);
 
         ApiService api =
                 ApiClient.getClient().create(ApiService.class);
@@ -112,7 +156,11 @@ public class RegistrarPrenda extends AppCompatActivity {
                     public void onResponse(Call<Producto> call,
                                            Response<Producto> response) {
 
-                        if(response.isSuccessful()){
+                        btnGuardar.setEnabled(true);
+
+                        if (response.isSuccessful()) {
+
+                            logEvento("SUCCESS", "PRENDA_REGISTRADA", nombre + " / " + categoria);
 
                             Toast.makeText(
                                     RegistrarPrenda.this,
@@ -122,7 +170,9 @@ public class RegistrarPrenda extends AppCompatActivity {
 
                             finish();
 
-                        }else{
+                        } else {
+
+                            logEvento("ERROR", "GUARDAR_FALLIDO", "Código: " + response.code());
 
                             Toast.makeText(
                                     RegistrarPrenda.this,
@@ -136,12 +186,31 @@ public class RegistrarPrenda extends AppCompatActivity {
                     public void onFailure(Call<Producto> call,
                                           Throwable t) {
 
+                        btnGuardar.setEnabled(true);
+
+                        logEvento("ERROR", "ERROR_CONEXION_GUARDAR", String.valueOf(t.getMessage()));
+
                         Toast.makeText(
                                 RegistrarPrenda.this,
-                                t.getMessage(),
+                                "Error de conexión: " + t.getMessage(),
                                 Toast.LENGTH_LONG
                         ).show();
                     }
                 });
+    }
+
+    // =========================
+    // FIREBASE LOG
+    // =========================
+    private void logEvento(String tipo, String evento, String detalle) {
+
+        HashMap<String, Object> log = new HashMap<>();
+
+        log.put("tipo", tipo);
+        log.put("evento", evento);
+        log.put("detalle", detalle);
+        log.put("fecha", System.currentTimeMillis());
+
+        db.collection("logs_registro_prenda").add(log);
     }
 }

@@ -117,6 +117,22 @@
         </LinearLayout>
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnDashboard"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginBottom="14dp"
+            android:text="Dashboard"
+            android:textColor="@color/kemba_white"
+            android:textSize="16sp"
+            app:backgroundTint="@color/kemba_surface"
+            app:cornerRadius="14dp"
+            app:icon="@drawable/ic_dashboard"
+            app:iconGravity="start"
+            app:iconTint="@color/kemba_gold"
+            app:strokeColor="@color/kemba_gold"
+            app:strokeWidth="1.5dp" />
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnResumen"
             android:layout_width="match_parent"
             android:layout_height="56dp"

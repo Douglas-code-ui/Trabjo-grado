@@ -3,70 +3,148 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF">
+    android:background="@color/kemba_black"
+    android:fillViewport="true"
+    android:scrollbars="none">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="20dp">
+        android:padding="24dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
             android:text="Registrar Prenda"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:textColor="#000000"
-            android:layout_marginBottom="20dp"/>
+            android:textColor="@color/kemba_gold"
+            android:textSize="28sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:text="Nombre"
+            android:textColor="@color/kemba_white"
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/txtNombre"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="52dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_input"
             android:hint="Nombre de la prenda"
-            android:layout_marginBottom="15dp"/>
+            android:importantForAutofill="no"
+            android:inputType="textCapSentences"
+            android:padding="14dp"
+            android:textColor="@color/kemba_white"
+            android:textColorHint="@color/kemba_hint"
+            android:textSize="14sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:text="Categoría"
+            android:textColor="@color/kemba_white"
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
         <Spinner
             android:id="@+id/spCategoria"
             android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_input"
+            android:paddingStart="6dp"
+            android:popupBackground="@color/kemba_surface" />
+
+        <TextView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"/>
+            android:layout_marginBottom="6dp"
+            android:text="Talla"
+            android:textColor="@color/kemba_white"
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/txtTalla"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="52dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_input"
             android:hint="Talla"
-            android:layout_marginBottom="15dp"/>
+            android:importantForAutofill="no"
+            android:inputType="textCapCharacters"
+            android:padding="14dp"
+            android:textColor="@color/kemba_white"
+            android:textColorHint="@color/kemba_hint"
+            android:textSize="14sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:text="Precio"
+            android:textColor="@color/kemba_white"
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/txtPrecio"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="52dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_input"
             android:hint="Precio"
+            android:importantForAutofill="no"
             android:inputType="numberDecimal"
-            android:layout_marginBottom="15dp"/>
+            android:padding="14dp"
+            android:textColor="@color/kemba_white"
+            android:textColorHint="@color/kemba_hint"
+            android:textSize="14sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:text="Stock"
+            android:textColor="@color/kemba_white"
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/txtStock"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="52dp"
+            android:layout_marginBottom="28dp"
+            android:background="@drawable/bg_input"
             android:hint="Stock"
+            android:importantForAutofill="no"
             android:inputType="number"
-            android:layout_marginBottom="25dp"/>
+            android:padding="14dp"
+            android:textColor="@color/kemba_white"
+            android:textColorHint="@color/kemba_hint"
+            android:textSize="14sp" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnGuardar"
-            android:layout_width="220dp"
-            android:layout_height="48dp"
-            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
             android:text="Guardar Prenda"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/kemba_black"
             android:textSize="16sp"
-            app:backgroundTint="#000000"
-            app:cornerRadius="12dp"/>
+            android:textStyle="bold"
+            app:backgroundTint="@color/kemba_gold"
+            app:cornerRadius="26dp" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="24dp" />
     </LinearLayout>
-
 </ScrollView>

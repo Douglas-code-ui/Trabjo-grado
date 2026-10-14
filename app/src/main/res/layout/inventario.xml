@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/kemba_black"
     android:orientation="vertical"
-    android:background="#FFFFFF"
-    android:padding="16dp">
+    android:padding="20dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -15,71 +15,83 @@
             android:id="@+id/txtTitulo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:text="Inventario"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:textColor="#000000" />
+            android:textColor="@color/kemba_gold"
+            android:textSize="28sp"
+            android:textStyle="bold" />
 
         <ImageButton
             android:id="@+id/btnConfig"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
             android:background="@android:color/transparent"
-            android:src="@drawable/confi"
+            android:contentDescription="Configuración"
             android:scaleType="fitCenter"
-            android:contentDescription="Configuración" />
-
+            android:src="@drawable/ic_settings"
+            app:tint="@color/kemba_gold" />
     </RelativeLayout>
 
-    <TableLayout
-        android:id="@+id/tableInventario"
+    <!-- Tabla con scroll: ocupa el espacio disponible y el botón queda abajo -->
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginTop="20dp"
-        android:stretchColumns="*">
+        android:layout_weight="1"
+        android:background="@drawable/bg_card"
+        android:scrollbars="none">
 
-        <TableRow
-            android:background="#333333">
+        <TableLayout
+            android:id="@+id/tableInventario"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:stretchColumns="*">
 
-            <TextView
-                android:padding="10dp"
-                android:text="ID"
-                android:textColor="#FFFFFF"
-                android:textStyle="bold" />
+            <TableRow android:background="@color/kemba_surface">
 
-            <TextView
-                android:padding="10dp"
-                android:text="Producto"
-                android:textColor="#FFFFFF"
-                android:textStyle="bold" />
+                <TextView
+                    android:padding="12dp"
+                    android:text="ID"
+                    android:textColor="@color/kemba_gold"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
 
-            <TextView
-                android:padding="10dp"
-                android:text="Stock"
-                android:textColor="#FFFFFF"
-                android:textStyle="bold" />
+                <TextView
+                    android:padding="12dp"
+                    android:text="Producto"
+                    android:textColor="@color/kemba_gold"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
 
-            <TextView
-                android:padding="10dp"
-                android:text="Precio"
-                android:textColor="#FFFFFF"
-                android:textStyle="bold" />
+                <TextView
+                    android:padding="12dp"
+                    android:text="Stock"
+                    android:textColor="@color/kemba_gold"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
 
-        </TableRow>
+                <TextView
+                    android:padding="12dp"
+                    android:text="Precio"
+                    android:textColor="@color/kemba_gold"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
 
-    </TableLayout>
+            </TableRow>
+        </TableLayout>
+    </ScrollView>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnCrear"
-        android:layout_width="220dp"
-        android:layout_height="48dp"
-        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
         android:layout_marginTop="20dp"
         android:text="Registrar Prenda"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/kemba_black"
         android:textSize="16sp"
-        app:backgroundTint="#000000"
-        app:cornerRadius="12dp" />
-
+        android:textStyle="bold"
+        app:backgroundTint="@color/kemba_gold"
+        app:cornerRadius="26dp" />
 </LinearLayout>

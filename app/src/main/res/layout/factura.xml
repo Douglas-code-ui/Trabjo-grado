@@ -1,131 +1,137 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F5F5">
+    android:background="@color/kemba_black"
+    android:fillViewport="true"
+    android:scrollbars="none">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="20dp">
+        android:padding="24dp">
 
         <!-- TITULO -->
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
             android:text="Factura"
+            android:textColor="@color/kemba_gold"
             android:textSize="28sp"
-            android:textStyle="bold"
-            android:textColor="#000000"
-            android:layout_marginBottom="25dp"/>
+            android:textStyle="bold" />
 
         <!-- TARJETA FACTURA -->
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/bg_card"
             android:orientation="vertical"
-            android:background="@drawable/edittext_bacground"
-            android:padding="18dp">
-
-            <!-- NUMERO FACTURA -->
+            android:padding="20dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Número Factura"
-                android:textStyle="bold"
-                android:textColor="#666666"
-                android:textSize="14sp"/>
+                android:textColor="@color/kemba_hint"
+                android:textSize="13sp" />
 
             <TextView
                 android:id="@+id/txtNumeroFactura"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
                 android:text="FAC-0001"
+                android:textColor="@color/kemba_white"
                 android:textSize="20sp"
-                android:textStyle="bold"
-                android:textColor="#000000"
-                android:layout_marginBottom="20dp"/>
+                android:textStyle="bold" />
 
-            <!-- FECHA -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="14dp"
+                android:layout_marginBottom="14dp"
+                android:background="@color/kemba_stroke" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Fecha"
-                android:textStyle="bold"
-                android:textColor="#666666"
-                android:textSize="14sp"/>
+                android:textColor="@color/kemba_hint"
+                android:textSize="13sp" />
 
             <TextView
                 android:id="@+id/txtFecha"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
                 android:text="2026-05-21"
-                android:textSize="18sp"
-                android:textColor="#000000"
-                android:layout_marginBottom="20dp"/>
+                android:textColor="@color/kemba_white"
+                android:textSize="18sp" />
 
-            <!-- TOTAL -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="14dp"
+                android:layout_marginBottom="14dp"
+                android:background="@color/kemba_stroke" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Total"
-                android:textStyle="bold"
-                android:textColor="#666666"
-                android:textSize="14sp"/>
+                android:textColor="@color/kemba_hint"
+                android:textSize="13sp" />
 
             <TextView
                 android:id="@+id/txtTotal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
                 android:text="$0"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:textColor="#2962FF"
-                android:layout_marginBottom="20dp"/>
+                android:textColor="@color/kemba_gold"
+                android:textSize="28sp"
+                android:textStyle="bold" />
 
-            <!-- ID VENTA -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="14dp"
+                android:layout_marginBottom="14dp"
+                android:background="@color/kemba_stroke" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="ID Venta"
-                android:textStyle="bold"
-                android:textColor="#666666"
-                android:textSize="14sp"/>
+                android:textColor="@color/kemba_hint"
+                android:textSize="13sp" />
 
             <TextView
                 android:id="@+id/txtVentaId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
                 android:text="1"
-                android:textSize="18sp"
-                android:textColor="#000000"/>
+                android:textColor="@color/kemba_white"
+                android:textSize="18sp" />
 
         </LinearLayout>
 
         <!-- BOTON -->
-
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnFactura"
-            android:layout_width="220dp"
-            android:layout_height="48dp"
-            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginTop="28dp"
+            android:layout_marginBottom="28dp"
             android:text="Factura"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/kemba_black"
             android:textSize="16sp"
-            app:backgroundTint="#000000"
-            app:cornerRadius="12dp"
-            android:layout_marginBottom="28dp" />
-
+            android:textStyle="bold"
+            app:backgroundTint="@color/kemba_gold"
+            app:cornerRadius="26dp" />
     </LinearLayout>
-
 </ScrollView>

@@ -4,7 +4,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.widget.*;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -14,6 +23,7 @@ import com.grupo2.prygrados.Api.ApiService;
 import com.grupo2.prygrados.Modelo.Producto;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -53,7 +63,6 @@ public class RegistroVenta extends AppCompatActivity {
         api = ApiClient.getClient().create(ApiService.class);
         db = FirebaseFirestore.getInstance();
 
-        // 🔥 LOG: entrada pantalla
         logEvento("SUCCESS", "APP_REGISTRO_VENTA", "Entró a registro de venta");
 
         idUsuario = getIntent().getIntExtra("idUsuario", 0);
@@ -64,11 +73,13 @@ public class RegistroVenta extends AppCompatActivity {
         txtNombreEmpleado.setText(nombre != null ? nombre : "");
         txtRolEmpleado.setText(rol != null ? rol : "");
 
+        // 🎨 Layouts oscuros propios: texto blanco en el Spinner
         adapter = new ArrayAdapter<>(
                 this,
-                android.R.layout.simple_spinner_item,
+                R.layout.item_spinner,
                 listaProductos
         );
+        adapter.setDropDownViewResource(R.layout.item_spinner_dropdown);
 
         spinnerPrenda.setAdapter(adapter);
 
@@ -76,7 +87,7 @@ public class RegistroVenta extends AppCompatActivity {
 
         spinnerPrenda.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, android.view.View view, int position, long id) {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 calcularTotal();
                 logEvento("SUCCESS", "SELECCION_PRODUCTO", "Producto seleccionado");
             }
@@ -133,7 +144,7 @@ public class RegistroVenta extends AppCompatActivity {
             @Override
             public void onFailure(Call<List<Producto>> call, Throwable t) {
 
-                logEvento("ERROR", "ERROR_CONEXION_PRODUCTOS", t.getMessage());
+                logEvento("ERROR", "ERROR_CONEXION_PRODUCTOS", String.valueOf(t.getMessage()));
 
                 Toast.makeText(RegistroVenta.this,
                         "Error conexión: " + t.getMessage(),
@@ -162,7 +173,12 @@ public class RegistroVenta extends AppCompatActivity {
             int cantidad = Integer.parseInt(cantidadStr);
             double total = cantidad * producto.getPrecioVenta();
 
-            etTotal.setText(String.valueOf(total));
+            // Sin ".0" cuando el total es un número entero
+            if (total == Math.floor(total)) {
+                etTotal.setText(String.valueOf((long) total));
+            } else {
+                etTotal.setText(String.valueOf(total));
+            }
 
         } catch (Exception e) {
 
@@ -181,6 +197,7 @@ public class RegistroVenta extends AppCompatActivity {
 
             logEvento("ERROR", "VALIDACION_PRODUCTO", "No seleccionó producto");
 
+            Toast.makeText(this, "Selecciona una prenda", Toast.LENGTH_SHORT).show();
             btnRegistrar.setEnabled(true);
             return;
         }
@@ -191,6 +208,23 @@ public class RegistroVenta extends AppCompatActivity {
 
             logEvento("ERROR", "VALIDACION_CANTIDAD", "Cantidad vacía");
 
+            Toast.makeText(this, "Ingresa la cantidad", Toast.LENGTH_SHORT).show();
+            btnRegistrar.setEnabled(true);
+            return;
+        }
+
+        int cantidad;
+        try {
+            cantidad = Integer.parseInt(cantidadStr);
+        } catch (NumberFormatException e) {
+            cantidad = 0;
+        }
+
+        if (cantidad <= 0) {
+
+            logEvento("ERROR", "VALIDACION_CANTIDAD", "Cantidad menor o igual a 0");
+
+            Toast.makeText(this, "La cantidad debe ser mayor a 0", Toast.LENGTH_SHORT).show();
             btnRegistrar.setEnabled(true);
             return;
         }
@@ -201,6 +235,7 @@ public class RegistroVenta extends AppCompatActivity {
 
             logEvento("ERROR", "VALIDACION_PAGO", "No seleccionó método de pago");
 
+            Toast.makeText(this, "Selecciona el tipo de pago", Toast.LENGTH_SHORT).show();
             btnRegistrar.setEnabled(true);
             return;
         }
@@ -208,7 +243,6 @@ public class RegistroVenta extends AppCompatActivity {
         RadioButton radioSeleccionado = findViewById(selectedId);
         String metodoPago = radioSeleccionado.getText().toString();
 
-        int cantidad = Integer.parseInt(cantidadStr);
         Producto producto = (Producto) spinnerPrenda.getSelectedItem();
 
         api.registrarVenta(
@@ -229,12 +263,24 @@ public class RegistroVenta extends AppCompatActivity {
 
                     logEvento("SUCCESS", "VENTA_REGISTRADA", "ID: " + idVenta);
 
+                    int idVentaNum;
+                    try {
+                        idVentaNum = Integer.parseInt(idVenta.trim());
+                    } catch (NumberFormatException e) {
+                        // El servidor respondió algo que no es un número
+                        logEvento("ERROR", "ID_VENTA_INVALIDO", idVenta);
+                        Toast.makeText(RegistroVenta.this,
+                                "Venta registrada, pero no se pudo abrir la factura",
+                                Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
                     Toast.makeText(RegistroVenta.this,
                             "Venta registrada correctamente",
                             Toast.LENGTH_LONG).show();
 
                     Intent intent = new Intent(RegistroVenta.this, Factur.class);
-                    intent.putExtra("idVenta", Integer.parseInt(idVenta));
+                    intent.putExtra("idVenta", idVentaNum);
                     startActivity(intent);
                     finish();
 
@@ -253,7 +299,7 @@ public class RegistroVenta extends AppCompatActivity {
 
                 btnRegistrar.setEnabled(true);
 
-                logEvento("ERROR", "ERROR_CONEXION_VENTA", t.getMessage());
+                logEvento("ERROR", "ERROR_CONEXION_VENTA", String.valueOf(t.getMessage()));
 
                 Toast.makeText(RegistroVenta.this,
                         "Error conexión: " + t.getMessage(),
@@ -267,7 +313,7 @@ public class RegistroVenta extends AppCompatActivity {
     // =========================
     private void logEvento(String tipo, String evento, String detalle) {
 
-        java.util.HashMap<String, Object> log = new java.util.HashMap<>();
+        HashMap<String, Object> log = new HashMap<>();
 
         log.put("tipo", tipo);
         log.put("evento", evento);

@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#F5F5F5">
+    android:background="@color/kemba_black"
+    android:orientation="vertical">
 
     <!-- HEADER -->
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -18,158 +16,180 @@
             android:id="@+id/txtTitulo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:text="Resumen de datos"
+            android:textColor="@color/kemba_gold"
             android:textSize="28sp"
-            android:textStyle="bold"
-            android:textColor="#000000"/>
+            android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/btnConfig"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_alignParentEnd="true"
-            android:src="@drawable/confi"/>
+            android:layout_centerVertical="true"
+            android:contentDescription="Configuración"
+            android:src="@drawable/ic_settings"
+            app:tint="@color/kemba_gold" />
     </RelativeLayout>
 
-    <!-- MENU -->
-
+    <!-- MENU (pestañas): activa en dorado, inactivas en gris -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingStart="5dp"
-        android:paddingEnd="5dp">
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp">
 
         <TextView
             android:id="@+id/tabProductos"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:padding="10dp"
             android:text="Total de Productos"
-            android:textStyle="bold"
-            android:textSize="14sp"
-            android:padding="10dp"/>
+            android:textColor="@color/kemba_gold"
+            android:textSize="13sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tabVentas"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:padding="10dp"
             android:text="Ventas de hoy"
-            android:textStyle="bold"
-            android:textColor="#666666"
-            android:textSize="14sp"
-            android:padding="10dp"/>
+            android:textColor="@color/kemba_hint"
+            android:textSize="13sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tabStock"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:padding="10dp"
             android:text="Stock bajo"
-            android:textStyle="bold"
-            android:textColor="#666666"
-            android:textSize="14sp"
-            android:padding="10dp"/>
+            android:textColor="@color/kemba_hint"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
     </LinearLayout>
 
-    <!-- PRODUCTOS -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/kemba_stroke" />
 
+    <!-- PRODUCTOS -->
     <LinearLayout
         android:id="@+id/layoutProductos"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="horizontal"
+        android:padding="16dp">
 
-        <TableLayout
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:padding="10dp">
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_card"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:padding="20dp">
 
-            <!-- TITULOS -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Buzos"
+                android:textColor="@color/kemba_white"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
-            <TableRow
-                android:background="#EEEEEE"
-                android:padding="12dp">
+            <TextView
+                android:id="@+id/txtBuzos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="0"
+                android:textColor="@color/kemba_gold"
+                android:textSize="36sp"
+                android:textStyle="bold" />
+        </LinearLayout>
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Buzos"
-                    android:textStyle="bold"
-                    android:textSize="16sp"
-                    android:textColor="#000000"
-                    android:gravity="center"/>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_card"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:padding="20dp">
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Pantalones"
-                    android:textStyle="bold"
-                    android:textSize="16sp"
-                    android:textColor="#000000"
-                    android:gravity="center"/>
-            </TableRow>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pantalones"
+                android:textColor="@color/kemba_white"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
-            <!-- DATOS -->
-
-            <TableRow
-                android:padding="15dp">
-
-                <TextView
-                    android:id="@+id/txtBuzos"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="0"
-                    android:textSize="22sp"
-                    android:textStyle="bold"
-                    android:textColor="#000000"
-                    android:gravity="center"/>
-
-                <TextView
-                    android:id="@+id/txtPantalones"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="0"
-                    android:textSize="22sp"
-                    android:textStyle="bold"
-                    android:textColor="#000000"
-                    android:gravity="center"/>
-            </TableRow>
-
-        </TableLayout>
+            <TextView
+                android:id="@+id/txtPantalones"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="0"
+                android:textColor="@color/kemba_gold"
+                android:textSize="36sp"
+                android:textStyle="bold" />
+        </LinearLayout>
 
     </LinearLayout>
 
     <!-- VENTAS DE HOY -->
-
     <LinearLayout
         android:id="@+id/layoutVentas"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_margin="16dp"
+        android:layout_weight="1"
+        android:background="@drawable/bg_card"
         android:orientation="vertical"
         android:visibility="gone">
 
         <ListView
             android:id="@+id/listVentas"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="match_parent"
+            android:divider="@color/kemba_stroke"
+            android:dividerHeight="1dp" />
     </LinearLayout>
 
     <!-- STOCK BAJO -->
-
     <LinearLayout
         android:id="@+id/layoutStock"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_margin="16dp"
+        android:layout_weight="1"
+        android:background="@drawable/bg_card"
         android:orientation="vertical"
         android:visibility="gone">
 
         <ListView
             android:id="@+id/listStock"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="match_parent"
+            android:divider="@color/kemba_stroke"
+            android:dividerHeight="1dp" />
     </LinearLayout>
 
 </LinearLayout>

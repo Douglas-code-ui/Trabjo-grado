@@ -3,6 +3,7 @@ package com.grupo2.prygrados;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -30,7 +31,13 @@ public class Notificaciones extends AppCompatActivity {
         setContentView(R.layout.notificaciones);
 
         listView = findViewById(R.id.listReportes);
+    }
 
+    // Se recarga cada vez que se abre o se vuelve a la pantalla,
+    // así los reportes nuevos aparecen sin reabrir la app
+    @Override
+    protected void onResume() {
+        super.onResume();
         cargarReportes();
     }
 
@@ -52,6 +59,10 @@ public class Notificaciones extends AppCompatActivity {
                     for (Reporte r : response.body()) {
 
                         String fechaBonita = r.getFechaGeneracion();
+
+                        if (fechaBonita == null) {
+                            fechaBonita = "Sin fecha";
+                        }
 
                         try {
 
@@ -76,21 +87,38 @@ public class Notificaciones extends AppCompatActivity {
                             // muestra la original.
                         }
 
+                        String descripcion = r.getDescripcion() != null
+                                ? r.getDescripcion()
+                                : "";
+
                         lista.add(
                                 "📅 " + fechaBonita
                                         + "\n\n📢 "
-                                        + r.getDescripcion()
+                                        + descripcion
                         );
                     }
 
+                    if (lista.isEmpty()) {
+                        lista.add("No hay reportes por ahora");
+                    }
+
+                    // 🎨 Layout propio: texto blanco sobre fondo oscuro
                     ArrayAdapter<String> adapter =
                             new ArrayAdapter<>(
                                     Notificaciones.this,
-                                    android.R.layout.simple_list_item_1,
+                                    R.layout.item_lista,
                                     lista
                             );
 
                     listView.setAdapter(adapter);
+
+                } else {
+
+                    Toast.makeText(
+                            Notificaciones.this,
+                            "No se pudieron cargar los reportes",
+                            Toast.LENGTH_LONG
+                    ).show();
                 }
 
             }
@@ -99,6 +127,11 @@ public class Notificaciones extends AppCompatActivity {
             public void onFailure(Call<List<Reporte>> call,
                                   Throwable t) {
 
+                Toast.makeText(
+                        Notificaciones.this,
+                        "Error de conexión: " + t.getMessage(),
+                        Toast.LENGTH_LONG
+                ).show();
             }
         });
 

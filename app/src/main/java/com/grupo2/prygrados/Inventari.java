@@ -1,7 +1,9 @@
 package com.grupo2.prygrados;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -9,11 +11,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.grupo2.prygrados.Api.ApiClient;
 import com.grupo2.prygrados.Api.ApiService;
 import com.grupo2.prygrados.Modelo.Producto;
 
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -27,6 +32,10 @@ public class Inventari extends AppCompatActivity {
     private com.google.android.material.button.MaterialButton btnCrear;
 
     private ApiService apiService;
+    private FirebaseFirestore db;
+
+    // Stock igual o menor a este número se resalta en rojo
+    private static final int STOCK_BAJO = 5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,18 +47,25 @@ public class Inventari extends AppCompatActivity {
         btnCrear = findViewById(R.id.btnCrear);
 
         apiService = ApiClient.getClient().create(ApiService.class);
+        db = FirebaseFirestore.getInstance();
 
-        cargarProductos();
+        logEvento("SUCCESS", "APP_INVENTARIO", "Entró a pantalla inventario");
 
         btnCrear.setOnClickListener(v -> {
 
-        Intent intent =
-        new Intent(Inventari.this,
-        RegistrarPrenda.class);
+            logEvento("SUCCESS", "CLICK_REGISTRAR_PRENDA", "Abrió registrar prenda");
 
-        startActivity(intent);
+            Intent intent = new Intent(Inventari.this, RegistrarPrenda.class);
+            startActivity(intent);
         });
+    }
 
+    // Se recarga cada vez que se vuelve a esta pantalla,
+    // así la prenda recién registrada aparece sin reabrir la app
+    @Override
+    protected void onResume() {
+        super.onResume();
+        cargarProductos();
     }
 
     private void cargarProductos() {
@@ -60,15 +76,17 @@ public class Inventari extends AppCompatActivity {
             public void onResponse(Call<List<Producto>> call,
                                    Response<List<Producto>> response) {
 
-                if(response.isSuccessful()
-                        && response.body() != null){
+                if (response.isSuccessful() && response.body() != null) {
 
-                    List<Producto> productos =
-                            response.body();
+                    List<Producto> productos = response.body();
+
+                    logEvento("SUCCESS", "CARGA_INVENTARIO", "Total: " + productos.size());
 
                     mostrarProductos(productos);
 
-                }else{
+                } else {
+
+                    logEvento("ERROR", "CARGA_INVENTARIO", "Respuesta no exitosa");
 
                     Toast.makeText(
                             Inventari.this,
@@ -82,6 +100,8 @@ public class Inventari extends AppCompatActivity {
             public void onFailure(Call<List<Producto>> call,
                                   Throwable t) {
 
+                logEvento("ERROR", "ERROR_CONEXION_INVENTARIO", String.valueOf(t.getMessage()));
+
                 Toast.makeText(
                         Inventari.this,
                         "Error: " + t.getMessage(),
@@ -91,42 +111,83 @@ public class Inventari extends AppCompatActivity {
         });
     }
 
-    private void mostrarProductos(List<Producto> productos){
+    // Crea una celda de la tabla con el color y el padding del diseño
+    private TextView crearCelda(String texto, int color, boolean negrita) {
 
-        while(tableInventario.getChildCount() > 1){
+        TextView tv = new TextView(this);
+
+        int pad = dp(12);
+        tv.setPadding(pad, pad, pad, pad);
+        tv.setText(texto);
+        tv.setTextColor(color);
+        tv.setTextSize(14);
+
+        if (negrita) {
+            tv.setTypeface(tv.getTypeface(), android.graphics.Typeface.BOLD);
+        }
+
+        return tv;
+    }
+
+    private int dp(int valor) {
+        return Math.round(valor * getResources().getDisplayMetrics().density);
+    }
+
+    private void mostrarProductos(List<Producto> productos) {
+
+        // Deja solo el encabezado (fila 0)
+        while (tableInventario.getChildCount() > 1) {
             tableInventario.removeViewAt(1);
         }
 
-        for(Producto producto : productos){
+        int blanco = ContextCompat.getColor(this, R.color.kemba_white);
+        int dorado = ContextCompat.getColor(this, R.color.kemba_gold);
+        int linea = ContextCompat.getColor(this, R.color.kemba_stroke);
+        int rojo = Color.parseColor("#E24B4A");
+
+        for (Producto producto : productos) {
 
             TableRow fila = new TableRow(this);
 
-            TextView txtId = new TextView(this);
-            txtId.setPadding(10,10,10,10);
-            txtId.setText(String.valueOf(
-                    producto.getIdProducto()));
+            int stock = producto.getStockActual();
+            int colorStock = (stock <= STOCK_BAJO) ? rojo : blanco;
 
-            TextView txtNombre = new TextView(this);
-            txtNombre.setPadding(10,10,10,10);
-            txtNombre.setText(
-                    producto.getNombre());
+            fila.addView(crearCelda(
+                    String.valueOf(producto.getIdProducto()), blanco, false));
 
-            TextView txtStock = new TextView(this);
-            txtStock.setPadding(10,10,10,10);
-            txtStock.setText(String.valueOf(
-                    producto.getStockActual()));
+            fila.addView(crearCelda(
+                    producto.getNombre(), blanco, false));
 
-            TextView txtPrecio = new TextView(this);
-            txtPrecio.setPadding(10,10,10,10);
-            txtPrecio.setText(
-                    "$ " + producto.getPrecioVenta());
+            fila.addView(crearCelda(
+                    String.valueOf(stock), colorStock, stock <= STOCK_BAJO));
 
-            fila.addView(txtId);
-            fila.addView(txtNombre);
-            fila.addView(txtStock);
-            fila.addView(txtPrecio);
+            fila.addView(crearCelda(
+                    "$ " + producto.getPrecioVenta(), dorado, true));
 
             tableInventario.addView(fila);
+
+            // Línea fina entre filas
+            View separador = new View(this);
+            separador.setBackgroundColor(linea);
+            separador.setLayoutParams(new TableLayout.LayoutParams(
+                    TableLayout.LayoutParams.MATCH_PARENT, dp(1)));
+
+            tableInventario.addView(separador);
         }
+    }
+
+    // =========================
+    // FIREBASE LOG
+    // =========================
+    private void logEvento(String tipo, String evento, String detalle) {
+
+        HashMap<String, Object> log = new HashMap<>();
+
+        log.put("tipo", tipo);
+        log.put("evento", evento);
+        log.put("detalle", detalle);
+        log.put("fecha", System.currentTimeMillis());
+
+        db.collection("logs_inventario").add(log);
     }
 }

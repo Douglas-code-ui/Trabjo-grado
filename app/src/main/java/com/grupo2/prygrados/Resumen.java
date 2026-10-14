@@ -6,8 +6,10 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.grupo2.prygrados.Api.ApiClient;
 import com.grupo2.prygrados.Api.ApiService;
@@ -25,6 +27,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class Resumen extends AppCompatActivity {
+
+    // Stock igual o menor a este número se considera "bajo"
+    private static final int STOCK_BAJO = 5;
 
     private TextView txtBuzos;
     private TextView txtPantalones;
@@ -73,48 +78,45 @@ public class Resumen extends AppCompatActivity {
         listStock = findViewById(R.id.listStock);
 
         // =========================
-        // CARGAR DATOS
+        // CLICK EN LAS PESTAÑAS
         // =========================
+
+        tabProductos.setOnClickListener(v -> seleccionarTab(tabProductos));
+        tabVentas.setOnClickListener(v -> seleccionarTab(tabVentas));
+        tabStock.setOnClickListener(v -> seleccionarTab(tabStock));
+
+        // Al abrir, la pestaña activa es "Total de Productos"
+        seleccionarTab(tabProductos);
+    }
+
+    // Se recargan los datos cada vez que se vuelve a esta pantalla
+    @Override
+    protected void onResume() {
+        super.onResume();
 
         cargarProductos();
         cargarVentasHoy();
         cargarStockBajo();
+    }
 
-        // =========================
-        // CLICK PRODUCTOS
-        // =========================
+    // =========================
+    // PESTAÑAS
+    // =========================
 
-        tabProductos.setOnClickListener(v -> {
+    private void seleccionarTab(TextView tabActiva) {
 
-            layoutProductos.setVisibility(View.VISIBLE);
-            layoutVentas.setVisibility(View.GONE);
-            layoutStock.setVisibility(View.GONE);
+        // Muestra solo el contenido de la pestaña elegida
+        layoutProductos.setVisibility(tabActiva == tabProductos ? View.VISIBLE : View.GONE);
+        layoutVentas.setVisibility(tabActiva == tabVentas ? View.VISIBLE : View.GONE);
+        layoutStock.setVisibility(tabActiva == tabStock ? View.VISIBLE : View.GONE);
 
-        });
+        // Activa en dorado, las demás en gris claro
+        int activo = ContextCompat.getColor(this, R.color.kemba_gold);
+        int inactivo = ContextCompat.getColor(this, R.color.kemba_hint);
 
-        // =========================
-        // CLICK VENTAS
-        // =========================
-
-        tabVentas.setOnClickListener(v -> {
-
-            layoutProductos.setVisibility(View.GONE);
-            layoutVentas.setVisibility(View.VISIBLE);
-            layoutStock.setVisibility(View.GONE);
-
-        });
-
-        // =========================
-        // CLICK STOCK
-        // =========================
-
-        tabStock.setOnClickListener(v -> {
-
-            layoutProductos.setVisibility(View.GONE);
-            layoutVentas.setVisibility(View.GONE);
-            layoutStock.setVisibility(View.VISIBLE);
-
-        });
+        tabProductos.setTextColor(tabActiva == tabProductos ? activo : inactivo);
+        tabVentas.setTextColor(tabActiva == tabVentas ? activo : inactivo);
+        tabStock.setTextColor(tabActiva == tabStock ? activo : inactivo);
     }
 
     // =========================
@@ -143,6 +145,9 @@ public class Resumen extends AppCompatActivity {
 
                             for (Producto p : response.body()) {
 
+                                // Si el producto no trae categoría, se salta
+                                if (p.getCategoria() == null) continue;
+
                                 if (p.getCategoria()
                                         .equalsIgnoreCase("BUZOS")) {
 
@@ -169,6 +174,7 @@ public class Resumen extends AppCompatActivity {
                             Call<List<Producto>> call,
                             Throwable t) {
 
+                        avisarError(t);
                     }
                 });
     }
@@ -197,21 +203,17 @@ public class Resumen extends AppCompatActivity {
                             List<String> lista =
                                     new ArrayList<>();
 
-                            String fechaHoy =
+                            SimpleDateFormat formato =
                                     new SimpleDateFormat(
                                             "yyyy-MM-dd",
                                             Locale.getDefault()
-                                    ).format(new Date());
+                                    );
+
+                            String fechaHoy = formato.format(new Date());
 
                             for (Venta venta : response.body()) {
 
                                 if (venta.getFecha() != null) {
-
-                                    SimpleDateFormat formato =
-                                            new SimpleDateFormat(
-                                                    "yyyy-MM-dd",
-                                                    Locale.getDefault()
-                                            );
 
                                     String fechaVenta =
                                             formato.format(
@@ -230,10 +232,15 @@ public class Resumen extends AppCompatActivity {
                                 }
                             }
 
+                            if (lista.isEmpty()) {
+                                lista.add("No hay ventas registradas hoy");
+                            }
+
+                            // 🎨 Layout propio: texto blanco sobre fondo oscuro
                             ArrayAdapter<String> adapter =
                                     new ArrayAdapter<>(
                                             Resumen.this,
-                                            android.R.layout.simple_list_item_1,
+                                            R.layout.item_lista,
                                             lista
                                     );
 
@@ -246,6 +253,7 @@ public class Resumen extends AppCompatActivity {
                             Call<List<Venta>> call,
                             Throwable t) {
 
+                        avisarError(t);
                     }
                 });
     }
@@ -276,7 +284,7 @@ public class Resumen extends AppCompatActivity {
 
                             for (Producto p : response.body()) {
 
-                                if (p.getStockActual() <= 5) {
+                                if (p.getStockActual() <= STOCK_BAJO) {
 
                                     lista.add(
                                             p.getNombre()
@@ -286,10 +294,15 @@ public class Resumen extends AppCompatActivity {
                                 }
                             }
 
+                            if (lista.isEmpty()) {
+                                lista.add("No hay productos con stock bajo");
+                            }
+
+                            // 🎨 Layout propio: texto blanco sobre fondo oscuro
                             ArrayAdapter<String> adapter =
                                     new ArrayAdapter<>(
                                             Resumen.this,
-                                            android.R.layout.simple_list_item_1,
+                                            R.layout.item_lista,
                                             lista
                                     );
 
@@ -302,7 +315,25 @@ public class Resumen extends AppCompatActivity {
                             Call<List<Producto>> call,
                             Throwable t) {
 
+                        avisarError(t);
                     }
                 });
+    }
+
+    // Un solo aviso de error, aunque fallen las tres consultas a la vez
+    private long ultimoAviso = 0;
+
+    private void avisarError(Throwable t) {
+
+        long ahora = System.currentTimeMillis();
+
+        if (ahora - ultimoAviso < 3000) return;
+        ultimoAviso = ahora;
+
+        Toast.makeText(
+                this,
+                "Error de conexión: " + t.getMessage(),
+                Toast.LENGTH_LONG
+        ).show();
     }
 }

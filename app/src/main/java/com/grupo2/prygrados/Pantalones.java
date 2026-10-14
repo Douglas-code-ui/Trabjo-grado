@@ -2,21 +2,23 @@ package com.grupo2.prygrados;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.content.Intent;
-import android.view.View;
 
-import com.grupo2.prygrados.Modelo.Reporte;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.grupo2.prygrados.Api.ApiClient;
 import com.grupo2.prygrados.Api.ApiService;
 import com.grupo2.prygrados.Modelo.Producto;
+import com.grupo2.prygrados.Modelo.Reporte;
 
+import java.text.Normalizer;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -24,6 +26,11 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class Pantalones extends AppCompatActivity {
+
+    // Colores que reconoce la app. Cada uno necesita su foto: pan_<color>.png en res/drawable
+    private static final String[] COLORES = {
+            "negro", "azul", "gris", "beige", "blanco", "verde", "cafe", "rojo"
+    };
 
     private List<Producto> listaPantalones = new ArrayList<>();
 
@@ -46,30 +53,18 @@ public class Pantalones extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pantalones);
 
+        db = FirebaseFirestore.getInstance();
+
         txtBuscar = findViewById(R.id.txtBuscar);
         btnBuscar = findViewById(R.id.btnBuscar);
         imgNotificacion = findViewById(R.id.imgNotificacion);
         txtContador = findViewById(R.id.txtContador);
-
-        cargarNotificaciones();
-
-        imgNotificacion.setOnClickListener(v -> {
-
-            Intent intent = new Intent(
-                    Pantalones.this,
-                    Notificaciones.class
-            );
-
-            startActivity(intent);
-
-        });
 
         img1 = findViewById(R.id.imgCarrusel1);
         img2 = findViewById(R.id.imgCarrusel2);
 
         prev1 = findViewById(R.id.btnPrev1);
         next1 = findViewById(R.id.btnNext1);
-
         prev2 = findViewById(R.id.btnPrev2);
         next2 = findViewById(R.id.btnNext2);
 
@@ -81,17 +76,18 @@ public class Pantalones extends AppCompatActivity {
         txtPrecio2 = findViewById(R.id.txtPrecio2);
         txtStock2 = findViewById(R.id.txtStock2);
 
-        db = FirebaseFirestore.getInstance();
+        cargarNotificaciones();
 
-        // 🔥 LOG: entrada pantalla
+        imgNotificacion.setOnClickListener(v ->
+                startActivity(new Intent(Pantalones.this, Notificaciones.class)));
+
         logEvento("SUCCESS", "APP_PANTALONES", "Entró a pantalla pantalones");
 
         cargarPantalones();
 
         txtBuscar.setOnKeyListener((v, keyCode, event) -> {
-            if (event.getAction() == KeyEvent.ACTION_DOWN &&
-                    keyCode == KeyEvent.KEYCODE_ENTER) {
-
+            if (event.getAction() == KeyEvent.ACTION_DOWN
+                    && keyCode == KeyEvent.KEYCODE_ENTER) {
                 ejecutarBusqueda();
                 return true;
             }
@@ -114,14 +110,10 @@ public class Pantalones extends AppCompatActivity {
         String texto = txtBuscar.getText().toString().trim();
 
         if (texto.isEmpty()) {
-
             logEvento("SUCCESS", "CLICK_BUSCAR_VACIO", "Recargando pantalones");
-
             cargarPantalones();
         } else {
-
             logEvento("SUCCESS", "BUSQUEDA", "Buscando: " + texto);
-
             buscarProducto(texto);
         }
     }
@@ -142,9 +134,8 @@ public class Pantalones extends AppCompatActivity {
                     listaPantalones.clear();
 
                     for (Producto p : response.body()) {
-                        if (p.getCategoria() != null &&
-                                p.getCategoria().equalsIgnoreCase("PANTALONES")) {
-
+                        if (p.getCategoria() != null
+                                && p.getCategoria().equalsIgnoreCase("PANTALONES")) {
                             listaPantalones.add(p);
                         }
                     }
@@ -152,7 +143,7 @@ public class Pantalones extends AppCompatActivity {
                     logEvento("SUCCESS", "CARGA_PANTALONES", "Total: " + listaPantalones.size());
 
                     if (listaPantalones.isEmpty()) {
-                        txtNombre1.setText("No hay pantalones");
+                        limpiarPantalla("No hay pantalones");
                         return;
                     }
 
@@ -168,10 +159,8 @@ public class Pantalones extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Producto>> call, Throwable t) {
-
-                logEvento("ERROR", "ERROR_CONEXION", t.getMessage());
-
-                txtNombre1.setText("Error conexión");
+                logEvento("ERROR", "ERROR_CONEXION", String.valueOf(t.getMessage()));
+                limpiarPantalla("Error conexión");
             }
         });
     }
@@ -192,18 +181,15 @@ public class Pantalones extends AppCompatActivity {
                     listaPantalones.clear();
 
                     for (Producto p : response.body()) {
-                        if (p.getCategoria() != null &&
-                                p.getCategoria().equalsIgnoreCase("PANTALONES")) {
-
+                        if (p.getCategoria() != null
+                                && p.getCategoria().equalsIgnoreCase("PANTALONES")) {
                             listaPantalones.add(p);
                         }
                     }
 
                     if (listaPantalones.isEmpty()) {
-
                         logEvento("ERROR", "SIN_RESULTADOS", nombre);
-
-                        txtNombre1.setText("No encontrado");
+                        limpiarPantalla("No encontrado");
                         return;
                     }
 
@@ -218,10 +204,8 @@ public class Pantalones extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Producto>> call, Throwable t) {
-
-                logEvento("ERROR", "ERROR_BUSQUEDA", t.getMessage());
-
-                txtNombre1.setText("Error búsqueda");
+                logEvento("ERROR", "ERROR_BUSQUEDA", String.valueOf(t.getMessage()));
+                limpiarPantalla("Error búsqueda");
             }
         });
     }
@@ -238,8 +222,7 @@ public class Pantalones extends AppCompatActivity {
         txtNombre1.setText(p1.getNombre());
         txtPrecio1.setText("$ " + p1.getPrecioVenta());
         txtStock1.setText("Stock: " + p1.getStockActual());
-
-        img1.setImageResource(R.drawable.pan1);
+        img1.setImageResource(imagenPara(p1, R.drawable.pan1));
 
         if (listaPantalones.size() > 1) {
 
@@ -248,14 +231,58 @@ public class Pantalones extends AppCompatActivity {
             txtNombre2.setText(p2.getNombre());
             txtPrecio2.setText("$ " + p2.getPrecioVenta());
             txtStock2.setText("Stock: " + p2.getStockActual());
-
+            img2.setImageResource(imagenPara(p2, R.drawable.pan2));
+        } else {
+            // Solo hay un producto: se limpia el segundo carrusel
+            txtNombre2.setText("");
+            txtPrecio2.setText("");
+            txtStock2.setText("");
             img2.setImageResource(R.drawable.pan2);
         }
     }
+
+    // Deja la pantalla en blanco con un mensaje (sin resultados / error)
+    private void limpiarPantalla(String mensaje) {
+        txtNombre1.setText(mensaje);
+        txtPrecio1.setText("");
+        txtStock1.setText("");
+        img1.setImageResource(R.drawable.pan1);
+
+        txtNombre2.setText("");
+        txtPrecio2.setText("");
+        txtStock2.setText("");
+        img2.setImageResource(R.drawable.pan2);
+    }
+
+    // =========================
+    // FOTO SEGÚN EL COLOR DEL NOMBRE
+    // =========================
+    private String normalizar(String s) {
+        if (s == null) return "";
+        return Normalizer.normalize(s, Normalizer.Form.NFD)
+                .replaceAll("\\p{M}", "")   // quita tildes: café -> cafe
+                .toLowerCase();
+    }
+
+    private int imagenPara(Producto p, int respaldo) {
+        String nombre = normalizar(p.getNombre());
+
+        for (String color : COLORES) {
+            if (nombre.contains(color)) {
+                int id = getResources().getIdentifier(
+                        "pan_" + color, "drawable", getPackageName());
+                if (id != 0) return id;     // existe la foto de ese color
+            }
+        }
+        return respaldo;                    // sin color conocido: foto por defecto
+    }
+
+    // =========================
+    // NOTIFICACIONES
+    // =========================
     private void cargarNotificaciones() {
 
-        ApiService api =
-                ApiClient.getClient().create(ApiService.class);
+        ApiService api = ApiClient.getClient().create(ApiService.class);
 
         api.listarReportes().enqueue(new Callback<List<Reporte>>() {
 
@@ -268,11 +295,8 @@ public class Pantalones extends AppCompatActivity {
                     int cantidad = response.body().size();
 
                     if (cantidad == 0) {
-
                         txtContador.setVisibility(View.GONE);
-
                     } else {
-
                         txtContador.setVisibility(View.VISIBLE);
                         txtContador.setText(String.valueOf(cantidad));
                     }
@@ -280,20 +304,23 @@ public class Pantalones extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<Reporte>> call,
-                                  Throwable t) {
-
+            public void onFailure(Call<List<Reporte>> call, Throwable t) {
+                // Sin conexión: el contador simplemente no se muestra
             }
         });
-
     }
 
+    // =========================
+    // CARRUSELES
+    // =========================
     private void moverCarrusel1(int d) {
+        if (listaPantalones.isEmpty()) return;
         index1 = (index1 + d + listaPantalones.size()) % listaPantalones.size();
         mostrarProductos();
     }
 
     private void moverCarrusel2(int d) {
+        if (listaPantalones.isEmpty()) return;
         index2 = (index2 + d + listaPantalones.size()) % listaPantalones.size();
         mostrarProductos();
     }
@@ -303,7 +330,7 @@ public class Pantalones extends AppCompatActivity {
     // =========================
     private void logEvento(String tipo, String evento, String detalle) {
 
-        java.util.HashMap<String, Object> log = new java.util.HashMap<>();
+        HashMap<String, Object> log = new HashMap<>();
 
         log.put("tipo", tipo);
         log.put("evento", evento);
